@@ -36,13 +36,12 @@ class TrailApiService {
         },
       );
 
-/*
       if (response.statusCode == 200) {
         print('GET 요청 성공');
       } else {
         print('GET 요청 실패 - 상태 코드: ${response.statusCode}');
       }
-*/
+
       return response;
     } catch (e) {
       print('GET 요청 실패(getRequest함수) - $e');
@@ -307,6 +306,7 @@ class TrailApiService {
     }
   }
 
+//댓글 단 산책로
   Future<List<TrailCommentModel>?> getCommentedCourses(
       //위젯 디자인이 달라 여기만 다른 위젯 사용
       int page,
@@ -360,33 +360,6 @@ class TrailApiService {
     }
   }
 
-  // 나만의 Tag Tag기준 산책로 조회 - tag 조회
-
-  /*Future<List<TrailModel>?> getKeywordCourse(
-      int page, int num, String tagName) async {
-    try {
-      final response =
-          await getRequest('course/{courseId}/comment?page=$page&num=$num');
-
-      if (response.statusCode == 200) {
-        final parsedResponse =
-            jsonDecode(response.body) as Map<String, dynamic>;
-        final trails = parsedResponse['data'] as List<dynamic>;
-        List<TrailModel> courseInstances = [];
-        for (var trail in trails) {
-          final instance = TrailModel.fromJson(trail);
-          courseInstances.add(instance);
-        }
-        return courseInstances;
-      } else {
-        print('키워드별 산책로 조회 GET 요청 실패 - 상태 코드: ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      print('실패 - $e');
-      return null;
-    } */
-
   // 산책로 댓글 달기 (post) course/{courseId}/comment
   Future<http.Response> postComment(String endpoint, dynamic body) async {
     try {
@@ -436,30 +409,4 @@ class TrailApiService {
       return null;
     }
   }
-
-/*
-Future<List<String>?> viewComment(int courseId, int page, int num) async {
-  try {
-    final response = await getRequest('course/$courseId/comment?page=$page&num=$num');
-
-    if (response.statusCode == 200) {
-      final parsedResponse = jsonDecode(response.body) as Map<String, dynamic>;
-      final commentList = parsedResponse['data'] as List<dynamic>;
-
-      List<String> comments = commentList
-          .map((comment) => comment['content'].toString())
-          .toList();
-
-      print('산책로 댓글 조회 GET 요청 성공 - 상태 코드: ${response.statusCode}');
-      return comments;
-    } else {
-      print('산책로 댓글 조회 GET 요청 실패 - 상태 코드: ${response.statusCode}');
-      return null;
-    }
-  } catch (e) {
-    print('실패 - $e');
-    return null;
-  }
-}
-*/
 }

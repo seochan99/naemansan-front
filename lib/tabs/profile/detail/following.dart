@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:naemansan/services/mypage_api_service.dart';
 import 'package:naemansan/services/login_api_service.dart';
 import 'package:naemansan/models/follow.dart';
 
@@ -20,7 +19,7 @@ class _FollowingState extends State<Following> {
 
   // Fetch user info
   Future<Map<String, dynamic>?> fetchUserInfo() async {
-    ProfileApiService apiService = ProfileApiService();
+    ApiService apiService = ApiService();
     return await apiService.getUserInfo();
   }
 

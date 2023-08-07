@@ -20,7 +20,7 @@ class _FollowerState extends State<Follower> {
 
   // Fetch user info
   Future<Map<String, dynamic>?> fetchUserInfo() async {
-    ProfileApiService apiService = ProfileApiService();
+    ApiService apiService = ApiService();
     return await apiService.getUserInfo();
   }
 

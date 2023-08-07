@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:naemansan/screens/screen_index.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:naemansan/services/mypage_api_service.dart';
+import 'package:naemansan/services/login_api_service.dart';
 import 'package:naemansan/tabs/profile/edit/profile_introduction_edit.dart';
 import 'package:naemansan/tabs/profile/edit/profile_name_edit.dart';
 import 'package:naemansan/tabs/profile/edit/profile_image_edit.dart';
@@ -21,13 +21,14 @@ class _EditpageState extends State<Editpage> {
 
   // Fetch user info
   Future<Map<String, dynamic>?> fetchUserInfo() async {
-    ProfileApiService apiService = ProfileApiService();
+    ApiService apiService = ApiService();
     return await apiService.getUserInfo();
   }
 
   Future<void> saveChanges() async {
-    final profileApiService = ProfileApiService();
-    final response = await profileApiService.putRequest('user', {
+    final ApiService apiService = ApiService();
+
+    final response = await apiService.putRequest('user', {
       'name': newName,
       'introduction': newIntro,
     });
