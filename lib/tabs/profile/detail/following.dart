@@ -17,17 +17,11 @@ class _FollowingState extends State<Following> {
   dynamic userInfo = '';
   late ApiService apiService;
 
-  // Fetch user info
-  Future<Map<String, dynamic>?> fetchUserInfo() async {
-    ApiService apiService = ApiService();
-    return await apiService.getUserInfo();
-  }
-
   @override
   void initState() {
     super.initState();
-    user = fetchUserInfo();
     apiService = ApiService();
+    user = apiService.getUserInfo();
   }
 
   ListView makeList(AsyncSnapshot<List<FollowModel>?> snapshot) {
