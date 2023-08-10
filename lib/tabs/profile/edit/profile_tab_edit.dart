@@ -36,11 +36,12 @@ class _EditpageState extends State<Editpage> {
       'name': newName,
       'introduction': newIntro,
     });
-    Navigator.pushReplacement(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
         builder: (context) => const IndexScreen(index: 3),
       ),
+      (route) => false,
     );
   }
 

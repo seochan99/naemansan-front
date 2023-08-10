@@ -63,7 +63,6 @@ class _ProfileNameEditPageState extends State<ProfileNameEditPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                //saveNameChanges();
                 setState(() {
                   if (widget.userInfo != null) {
                     widget.userInfo!['name'] = newName;
