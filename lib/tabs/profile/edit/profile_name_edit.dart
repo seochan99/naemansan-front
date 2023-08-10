@@ -11,13 +11,12 @@ class ProfileNameEditPage extends StatefulWidget {
 }
 
 class _ProfileNameEditPageState extends State<ProfileNameEditPage> {
-  late Future<Map<String, dynamic>?> user;
-  String newName = '';
+  late String newName;
 
   @override
   void initState() {
     super.initState();
-    newName = widget.userInfo?['name'] ?? '';
+    newName = widget.userInfo?['name'];
   }
 
   @override
@@ -70,7 +69,6 @@ class _ProfileNameEditPageState extends State<ProfileNameEditPage> {
                     widget.userInfo!['name'] = newName;
                   }
                 });
-
                 Navigator.of(context).pop(newName);
               },
               style: ElevatedButton.styleFrom(
