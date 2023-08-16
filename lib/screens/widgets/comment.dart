@@ -3,7 +3,6 @@ import 'package:naemansan/services/login_api_service.dart';
 import 'package:naemansan/screens/comment_edit.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:naemansan/services/mypage_api_service.dart';
 
 // 산책로 디테일 페이지에서 댓글 볼 때 사용
 class CommentWidget extends StatefulWidget {
@@ -34,7 +33,7 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   // Fetch user info
   Future<Map<String, dynamic>?> fetchUserInfo() async {
-    ProfileApiService apiService = ProfileApiService();
+    ApiService apiService = ApiService();
     Map<String, dynamic>? userInfo = await apiService.getUserInfo();
     String myName = userInfo?['name'];
 

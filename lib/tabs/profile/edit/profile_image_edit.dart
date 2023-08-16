@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:naemansan/services/mypage_api_service.dart';
+import 'package:naemansan/services/login_api_service.dart';
 import 'package:naemansan/tabs/profile/overview/tab_mypage.dart';
 
 class ProfileImageEditPage extends StatefulWidget {
@@ -39,7 +39,7 @@ class _ProfileImageEditPageState extends State<ProfileImageEditPage> {
     setState(() {
       // 이미지 선택 후 상태 업데이트 (선택한 이미지를 수정 화면에 표시)
     });
-    await ProfileApiService().updateProfilePicture(_image!); //post
+    await ApiService().updateProfilePicture(_image!); //post
   }
 
   @override

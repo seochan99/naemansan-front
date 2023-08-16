@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:naemansan/services/mypage_api_service.dart';
 import 'package:naemansan/services/login_api_service.dart';
 import 'package:naemansan/models/follow.dart';
 
@@ -18,17 +17,11 @@ class _FollowingState extends State<Following> {
   dynamic userInfo = '';
   late ApiService apiService;
 
-  // Fetch user info
-  Future<Map<String, dynamic>?> fetchUserInfo() async {
-    ProfileApiService apiService = ProfileApiService();
-    return await apiService.getUserInfo();
-  }
-
   @override
   void initState() {
     super.initState();
-    user = fetchUserInfo();
     apiService = ApiService();
+    user = apiService.getUserInfo();
   }
 
   ListView makeList(AsyncSnapshot<List<FollowModel>?> snapshot) {

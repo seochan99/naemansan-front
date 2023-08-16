@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:naemansan/screens/screen_index.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:naemansan/services/mypage_api_service.dart';
+import 'package:naemansan/services/login_api_service.dart';
 import 'package:naemansan/tabs/profile/edit/profile_introduction_edit.dart';
 import 'package:naemansan/tabs/profile/edit/profile_name_edit.dart';
 import 'package:naemansan/tabs/profile/edit/profile_image_edit.dart';
+import 'package:naemansan/screens/screen_index.dart';
 
 class Editpage extends StatefulWidget {
-  const Editpage({Key? key}) : super(key: key);
+  final String userName;
+  final String userIntro;
+
+  const Editpage({Key? key, required this.userName, required this.userIntro})
+      : super(key: key);
+
   @override
   State<Editpage> createState() => _EditpageState();
 }
@@ -15,37 +20,39 @@ class Editpage extends StatefulWidget {
 class _EditpageState extends State<Editpage> {
   late Future<Map<String, dynamic>?> user;
   static const storage = FlutterSecureStorage();
-  dynamic userInfo = '';
-  late String newIntro;
+  late ApiService apiService;
   late String newName;
+  late String newIntro;
 
   // Fetch user info
   Future<Map<String, dynamic>?> fetchUserInfo() async {
-    ProfileApiService apiService = ProfileApiService();
+    ApiService apiService = ApiService();
     return await apiService.getUserInfo();
   }
 
   Future<void> saveChanges() async {
-    final profileApiService = ProfileApiService();
-    final response = await profileApiService.putRequest('user', {
+    final ApiService apiService = ApiService();
+    await apiService.putRequest('user', {
       'name': newName,
       'introduction': newIntro,
     });
-    fetchUserInfo(); // 사용자 정보 다시 불러오기
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const IndexScreen(index: 3),
+      ),
+      (route) => false,
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    user = fetchUserInfo();
+    apiService = ApiService();
+    user = apiService.getUserInfo();
 
-    user.then((userInfo) {
-      if (userInfo != null) {
-        newIntro = userInfo['introduction'] ?? '';
-        newName = userInfo['name'] ?? '';
-        setState(() {});
-      }
-    });
+    newName = widget.userName;
+    newIntro = widget.userIntro;
   }
 
   @override
@@ -64,7 +71,6 @@ class _EditpageState extends State<Editpage> {
           ),
           onPressed: () {
             Navigator.of(context).pop();
-            //Navigator.pop(context);
           },
         ),
         title: Row(
@@ -83,20 +89,6 @@ class _EditpageState extends State<Editpage> {
             TextButton(
               onPressed: () {
                 saveChanges();
-                Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const IndexScreen(index: 3)),
-                );
-
-/*
-                Navigator.of(context).pushAndRemoveUntil(
-                  //----------------------------완료----------------------
-                  MaterialPageRoute(
-                      builder: (context) => const IndexScreen(index: 3)),
-                  (route) => false,
-                );*/
               },
               child: const Text(
                 '완료',
@@ -109,7 +101,7 @@ class _EditpageState extends State<Editpage> {
             const SizedBox(width: 6),
           ],
         ),
-      ),
+      ), //! -------------------이미지 수정 관련
       body: FutureBuilder<Map<String, dynamic>?>(
         future: user,
         builder: (BuildContext context,
@@ -158,8 +150,8 @@ class _EditpageState extends State<Editpage> {
                           ),
                         ),
                       ],
-                    ), //-------------------------ㅇㄹ ㅅㅈ
-                    const SizedBox(height: 20),
+                    ), //------------------------
+                    const SizedBox(height: 20), //! ---------------- 이름 및 소개 수정
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: Column(
@@ -172,12 +164,12 @@ class _EditpageState extends State<Editpage> {
                               const SizedBox(width: 30),
                               Expanded(
                                 child: Text(
-                                  userData?['name'] ?? 'No Name',
+                                  userData?['name'],
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               IconButton(
@@ -193,9 +185,7 @@ class _EditpageState extends State<Editpage> {
                                     ),
                                   )
                                       .then((value) {
-                                    if (value != null) {
-                                      newName = value; // 수정된 값을 대입
-                                    }
+                                    newName = value; // 수정된 값을 대입
                                     setState(() {});
                                   });
                                 },
@@ -227,7 +217,7 @@ class _EditpageState extends State<Editpage> {
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
-                                    textAlign: TextAlign.center, // 텍스트 가운데 정렬
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
                               ),

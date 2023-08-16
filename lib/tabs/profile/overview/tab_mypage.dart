@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:naemansan/screens/screen_index.dart';
-import 'package:naemansan/services/mypage_api_service.dart';
+import 'package:naemansan/services/login_api_service.dart';
 import 'package:naemansan/tabs/profile/edit/profile_tab_edit.dart';
 import 'package:naemansan/tabs/tab_myrail.dart';
 import 'package:naemansan/tabs/profile/profile_tab_settings.dart';
@@ -19,42 +19,13 @@ class Mypage extends StatefulWidget {
 class _MypageState extends State<Mypage> {
   late Future<Map<String, dynamic>?> user;
   static const storage = FlutterSecureStorage();
-  dynamic userInfo = '';
-
-  // Fetch user info
-  Future<Map<String, dynamic>?> fetchUserInfo() async {
-    ProfileApiService apiService = ProfileApiService();
-    return await apiService.getUserInfo();
-  }
+  late ApiService apiService;
 
   @override
   void initState() {
     super.initState();
-    user = fetchUserInfo();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkUserState();
-    });
-  }
-
-  // Future<void> logout() async {
-  //   await deleteTokens();
-  //   await storage.delete(key: 'login');
-  //   goLogin();
-  // }
-
-  checkUserState() async {
-    userInfo = await storage.read(key: 'login');
-    if (userInfo == null) {
-      print('로그인 페이지로 이동');
-      goLogin();
-    } else {
-      print('로그인 중');
-    }
-  }
-
-  goLogin() {
-    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    apiService = ApiService();
+    user = apiService.getUserInfo();
   }
 
   @override
@@ -76,7 +47,7 @@ class _MypageState extends State<Mypage> {
                 color: Colors.black,
               ),
               onPressed: () {
-                Navigator.of(context).push(
+                Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (BuildContext context) =>
                         const IndexScreen(index: 0),
@@ -102,7 +73,7 @@ class _MypageState extends State<Mypage> {
                 color: Colors.black,
               ),
               onPressed: () {
-                // 설정 페이지로 이동동
+                // 설정 페이지로 이동
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -117,29 +88,8 @@ class _MypageState extends State<Mypage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                padding: const EdgeInsets.only(top: 15, right: 15),
-                icon: const Icon(Icons.edit, color: Colors.black),
-                onPressed: () async {
-                  // 프로필 수정 페이지로 이동
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Editpage(),
-                    ),
-                  );
-                  // 정보 수정 후 다시 가져오기
-/*
-                  setState(() {
-                    user = fetchUserInfo();
-                  });*/
-                },
-              ),
-            ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: FutureBuilder<Map<String, dynamic>?>(
                 future: user,
                 builder: (BuildContext context,
@@ -157,180 +107,212 @@ class _MypageState extends State<Mypage> {
                           userData?['image_path'] ?? '0_default_image.png';
                       String imageUrl =
                           'https://ossp.dcs-hyungjoon.com/image?uuid=$imageFileName';
-
                       return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundImage: NetworkImage(imageUrl),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            userData?['name'] ?? 'No Name',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            userData?['introduction'] ?? 'No Introduction',
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          const SizedBox(height: 16),
-                          const Divider(),
-                          const SizedBox(height: 16),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Column(
-                                children: [
-                                  const Text(
-                                    '팔로워',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Follower(),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      userData?['follower_cnt'].toString() ??
-                                          '0',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.black),
+                                onPressed: () async {
+                                  // 프로필 수정 페이지로 이동
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Editpage(
+                                        userName: userData?['name'],
+                                        userIntro: userData?['introduction'],
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  const Text(
-                                    '팔로잉',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Following(),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      userData?['following_cnt'].toString() ??
-                                          '0',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  );
+                                },
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
-                          const Divider(),
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Column(
+                              CircleAvatar(
+                                radius: 50,
+                                backgroundImage: NetworkImage(imageUrl),
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                userData?['name'] ?? 'No Name',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                userData?['introduction'] ?? 'No Introduction',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              const SizedBox(height: 16),
+                              const Divider(),
+                              const SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  const Text(
-                                    '좋아요한 산책로',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Myrail(initialTabIndex: 1),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      '${userData?['like_cnt'] ?? 0}',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        '팔로워',
+                                        style: TextStyle(fontSize: 16),
                                       ),
-                                    ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Follower(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          userData?['follower_cnt']
+                                                  .toString() ??
+                                              '0',
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        '팔로잉',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Following(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          userData?['following_cnt']
+                                                  .toString() ??
+                                              '0',
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                              Column(
+                              const SizedBox(height: 16),
+                              const Divider(),
+                              const SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  const Text(
-                                    '작성한 후기',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Myrail(initialTabIndex: 3),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      '${userData?['comment_cnt'] ?? 0}',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        '좋아요한 산책로',
+                                        style: TextStyle(fontSize: 16),
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  const Text(
-                                    '획득한 뱃지',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const BadgePage(),
-                                          // builder: (context) => const Badge(), 라고 되어잇던데 Badge() 는 어디서 나온거지...
+                                      const SizedBox(height: 8),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Myrail(
+                                                      initialTabIndex: 1),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          '${userData?['like_cnt'] ?? 0}',
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      );
-                                    },
-                                    child: Text(
-                                      '${userData?['badge_cnt'] ?? 0}',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
                                       ),
-                                    ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        '작성한 후기',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Myrail(
+                                                      initialTabIndex: 3),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          '${userData?['comment_cnt'] ?? 0}',
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        '획득한 뱃지',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const BadgePage(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          '${userData?['badge_cnt'] ?? 0}',
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -350,14 +332,4 @@ class _MypageState extends State<Mypage> {
       ),
     );
   }
-
-  // Delete tokens on logout
-  // Future<void> deleteTokens() async {
-  //   await storage.delete(key: 'accessToken');
-  //   await storage.delete(key: 'refreshToken');
-  //   print("삭제 진행함?");
-
-  //   final prefs = await SharedPreferences.getInstance();
-  //   prefs.setBool('isLogged', false);
-  // }
 }

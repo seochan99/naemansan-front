@@ -11,13 +11,12 @@ class ProfileIntroEditPage extends StatefulWidget {
 }
 
 class _ProfileIntroEditPageState extends State<ProfileIntroEditPage> {
-  late Future<Map<String, dynamic>?> user;
-  String? newIntro = '';
+  late String newIntro;
 
   @override
   void initState() {
     super.initState();
-    newIntro = widget.userInfo?['introduction'] ?? '';
+    newIntro = widget.userInfo?['introduction'];
   }
 
   @override
@@ -65,11 +64,8 @@ class _ProfileIntroEditPageState extends State<ProfileIntroEditPage> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  {
-                    widget.userInfo?['introduction'] = newIntro;
-                  }
+                  widget.userInfo?['introduction'] = newIntro;
                 });
-
                 Navigator.of(context).pop(newIntro);
               },
               style: ElevatedButton.styleFrom(
