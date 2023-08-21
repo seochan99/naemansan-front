@@ -182,8 +182,10 @@ class ApiService {
     return response;
   }
 
+  //회원탈퇴
   Future<http.Response> deleteUserInfo() async {
     final response = await deleteRequest('user');
+    print('탈퇴!');
     return response;
   }
 
