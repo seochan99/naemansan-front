@@ -714,11 +714,11 @@ class ApiService {
 
   /*알림 관련*/
   // 알림 조회
-  Future<List<dynamic>?> getNotification(int page, int num) async {
+  Future<List<NotificationModel>?> getNotification(int page, int num) async {
     try {
       final response = await getRequest('notification?page=$page&num=$num');
       if (response.statusCode == 200) {
-        print('본인 프로필 뱃지 조회 GET 요청 성공');
+        print('알림 조회 GET 요청 성공');
         final responseData = json.decode(response.body);
         final notificationList = responseData['data'] as List<dynamic>;
         final List<NotificationModel> notification =
