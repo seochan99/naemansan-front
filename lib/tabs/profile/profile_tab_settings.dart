@@ -15,18 +15,12 @@ class _SettingsState extends State<Settings> {
   late Future<Map<String, dynamic>?> user;
   static const storage = FlutterSecureStorage();
   dynamic userInfo = '';
-
-  // Fetch user info
-  Future<Map<String, dynamic>?> fetchUserInfo() async {
-    ApiService apiService = ApiService();
-    return await apiService.getUserInfo();
-  }
+  ApiService apiService = ApiService();
 
   @override
   void initState() {
     super.initState();
-    user = fetchUserInfo();
-
+    user = apiService.getUserInfo();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       checkUserState();
     });
@@ -181,34 +175,7 @@ class _SettingsState extends State<Settings> {
             Padding(
               padding: const EdgeInsets.all(13.0),
               child: InkWell(
-                onTap: () {
-                  premium();
-                },
-                child: Row(
-                  children: const [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4.0),
-                        child: Text(
-                          '프리미엄 업그레이드',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const Divider(),
-            Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: InkWell(
-                onTap: () {
-                  // 내만산 탈퇴하기
-                },
+                onTap: () => _showDialog(context),
                 child: Row(
                   children: const [
                     Expanded(
@@ -240,5 +207,43 @@ class _SettingsState extends State<Settings> {
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLogged', false);
+  }
+
+  void _showDialog(BuildContext context) async {
+    bool confirm = await showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        content: const Text('탈퇴 시 모든 정보가 삭제됩니다.\n정말 탈퇴하시겠습니까?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: const Text(
+              '탈퇴',
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: const Text(
+              '취소',
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await apiService.deleteUserInfo();
+      Navigator.pushNamed(context, '/login');
+    }
   }
 }
