@@ -275,7 +275,8 @@ class _HomeState extends State<Home> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NotificationScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const NotificationScreen()),
                 );
               },
             ),
@@ -488,19 +489,18 @@ class _HomeState extends State<Home> {
 
   //get device token to use for push notification
   Future getDeviceToken() async {
-    //request user permission for push notification
+    // Request user permission for push notification
+    await FirebaseMessaging.instance.requestPermission();
 
-    FirebaseMessaging.instance.requestPermission();
     FirebaseMessaging firebaseMessage = FirebaseMessaging.instance;
     String? deviceToken = await firebaseMessage.getToken();
-    bool isIos = true;
-    if (mounted) {
-      bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
-    }
+
+    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
+
     // deviceToekn, apple iOS여부 보내기
     // await apiService.sendDeviceToken(deviceToken, isIos);
-    print("??");
-    print("iOS,Android여부 : $isIos");
+    print("iOS, Android 여부 : $isIos");
+    print("deviceToken: $deviceToken");
     return (deviceToken == null) ? "" : deviceToken;
   }
 }
