@@ -29,7 +29,10 @@ class _BadgePageState extends State<BadgePage> {
       return const Center(
         child: CircularProgressIndicator(),
       );
-    } else if (snapshot.hasData && snapshot.data != null) {
+    } else if (snapshot.hasData &&
+        snapshot.data != null &&
+        snapshot.data!.isNotEmpty) {
+      print(snapshot.data);
       return ListView.builder(
         itemCount: snapshot.data!.length,
         itemBuilder: (context, index) {
@@ -53,7 +56,7 @@ class _BadgePageState extends State<BadgePage> {
     } else if (snapshot.hasError) {
       return Text('Error: ${snapshot.error}');
     } else {
-      return const Text('뱃지가 없습니다 ㅠㅠ');
+      return const Center(child: Text('획득한 뱃지가 없습니다'));
     }
   }
 
