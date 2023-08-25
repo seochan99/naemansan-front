@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:naemansan/models/follow.dart';
 import 'package:naemansan/models/badge.dart';
+import 'package:naemansan/models/notification.dart';
 
 class ApiService {
   final String baseUrl = 'https://ossp.dcs-hyungjoon.com';
@@ -709,5 +710,56 @@ class ApiService {
 
   Future<void> deleteComment(int courseId, int commentId) async {
     final response = await deleteRequest('course/$courseId/comment/$commentId');
+  }
+
+  /*알림 관련*/
+  // 알림 조회
+  Future<List<NotificationModel>?> getNotification(int page, int num) async {
+    try {
+      final response = await getRequest('notification?page=$page&num=$num');
+      if (response.statusCode == 200) {
+        print('알림 조회 GET 요청 성공');
+        final responseData = json.decode(response.body);
+        final notificationList = responseData['data'] as List<dynamic>;
+        final List<NotificationModel> notification =
+            notificationList.map((notificationdata) {
+          return NotificationModel.fromJson(notificationdata);
+        }).toList();
+        return notification;
+      } else {
+        print('알림 조회 get 실패 - 상태 코드: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('알림 조회 GET 요청 실패 - $e');
+    }
+    return null;
+  }
+
+  // 알림 상태 수정
+  Future<void> readNotification(int notificationId) async {
+    final requestData = {
+      "is_read_status": true,
+    };
+
+    final response = await putRequest(
+      'notification/$notificationId',
+      requestData,
+    );
+
+    if (response.statusCode == 200) {
+      print('알림 상태 수정 PUT 요청 성공');
+    } else {
+      print('알림 상태 수정 PUT 요청 실패 - 상태 코드: ${response.statusCode}');
+    }
+  }
+
+  // 알림 삭제
+  Future<void> deleteNotification(int notificationId) async {
+    final response = await deleteRequest('notification/$notificationId');
+    if (response.statusCode == 200) {
+      print('알림 삭제 Delete 요청 성공');
+    } else {
+      print('알림 삭제 delete 요청 실패 - 상태 코드: ${response.statusCode}');
+    }
   }
 }
