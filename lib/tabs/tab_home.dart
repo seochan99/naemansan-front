@@ -68,11 +68,6 @@ class _HomeState extends State<Home> {
     // user의 값이 null일때 loginScreen으로 이동하고 토큰값 지우기
     // print(user);
 
-    user.then((value) {
-      if (value == null) {
-        goLogin();
-      }
-    });
     _getCurrentLocation();
     setState(() {
       nowLocation = true;
@@ -112,20 +107,8 @@ class _HomeState extends State<Home> {
     }
   }
 
-  goLogin() async {
-    await deleteTokens();
-    await storage.delete(key: 'login');
-    gogoLogin();
-  }
-
-  gogoLogin() {
-    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-  }
-
   // push notification
   init() async {
-    String deviceToken = await getDeviceToken();
-
     // print("###### PRINT DEVICE TOKEN TO USE FOR PUSH NOTIFCIATION ######");
     // print(deviceToken);
     // print("############################################################");
@@ -485,22 +468,5 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-  //get device token to use for push notification
-  Future getDeviceToken() async {
-    // Request user permission for push notification
-    await FirebaseMessaging.instance.requestPermission();
-
-    FirebaseMessaging firebaseMessage = FirebaseMessaging.instance;
-    String? deviceToken = await firebaseMessage.getToken();
-
-    bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
-
-    // deviceToekn, apple iOS여부 보내기
-    // await apiService.sendDeviceToken(deviceToken, isIos);
-    print("iOS, Android 여부 : $isIos");
-    print("deviceToken: $deviceToken");
-    return (deviceToken == null) ? "" : deviceToken;
   }
 }

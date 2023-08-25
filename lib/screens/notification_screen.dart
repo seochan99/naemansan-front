@@ -120,7 +120,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     final Future<List<NotificationModel>?> notificationList =
-        apiService.getNotification(0, 100);
+        apiService.getNotification(1, 100);
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
