@@ -1,16 +1,21 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:naemansan/screens/Login/webview_apple_screen.dart';
 import 'package:naemansan/screens/Login/webview_google_screen.dart';
 import 'package:naemansan/screens/Login/webview_kakao_screen.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginBtn extends StatelessWidget {
   final String whatsLogin;
   final String logo;
   final BuildContext routeContext;
+  static const storage =
+      FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
 
   const LoginBtn(
       {super.key,
@@ -52,7 +57,25 @@ class LoginBtn extends StatelessWidget {
       );
     }
 
+    Future<Map<String, dynamic>> sendAuthRequestToServer(
+        String kakaoAccessToken) async {
+      const url = 'https://ossp.dcs-hyungjoon.com/auth/kakao';
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $kakaoAccessToken',
+          'Content-Type': 'application/json',
+        },
+      );
 
+      return json.decode(response.body);
+    }
+
+    successLogin() {
+      Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
+    }
+
+    // 카카오 로그인
     kakaoLoginUseSDK() async {
       if (await isKakaoTalkInstalled()) {
         try {
@@ -77,14 +100,34 @@ class LoginBtn extends StatelessWidget {
       } else {
         try {
           OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+
           // 카카오계정으로 로그인 성공 처리
-          print("Token : ${token.accessToken}");
+          print("카카오 토큰은 Token : ${token.accessToken}");
+          final response = await sendAuthRequestToServer(token.accessToken);
+          if (response['success']) {
+            final jwtAccessToken = response['data']['jwt']['access_token'];
+            final jwtRefreshTokenToken =
+                response['data']['jwt']['refresh_token'];
+            await saveTokens(jwtAccessToken, jwtRefreshTokenToken);
+            print("서버에서 받은 JWT access_token: $jwtAccessToken");
+
+            final prefs = await SharedPreferences.getInstance();
+            prefs.setBool('isLogged', true);
+
+            await storage.write(
+              key: 'login',
+              value: jwtAccessToken,
+            );
+
+            successLogin();
+          } else {
+            print("서버에서 에러 발생: ${response['error']}");
+          }
         } catch (error) {
           // 카카오계정으로 로그인 실패 처리
         }
       }
     }
-
 
     // login function
     void login(logo) async {
@@ -139,4 +182,10 @@ class LoginBtn extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> saveTokens(String accessToken, String refreshToken) async {
+  const storage = FlutterSecureStorage();
+  await storage.write(key: 'accessToken', value: accessToken);
+  await storage.write(key: 'refreshToken', value: refreshToken);
 }
