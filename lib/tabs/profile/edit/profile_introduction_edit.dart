@@ -11,7 +11,7 @@ class ProfileIntroEditPage extends StatefulWidget {
 }
 
 class _ProfileIntroEditPageState extends State<ProfileIntroEditPage> {
-  late String newIntro;
+  late String? newIntro;
 
   @override
   void initState() {

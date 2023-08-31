@@ -24,8 +24,6 @@ class LocationProvider with ChangeNotifier {
       );
       _currentPosition = position;
       notifyListeners();
-    } catch (error) {
-      print('Error fetching location: $error');
-    }
+    } catch (error) {}
   }
 }

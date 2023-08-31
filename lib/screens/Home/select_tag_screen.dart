@@ -20,7 +20,6 @@ class _SelectTagScreenState extends State<SelectTagScreen> {
   @override
   void initState() {
     super.initState();
-    print("widget.isEdit 값은? ${widget.isEdit}");
     getTagList();
   }
 
@@ -59,7 +58,6 @@ class _SelectTagScreenState extends State<SelectTagScreen> {
     bool? success;
     // 수정 상태
 
-    print("${widget.isEdit} 값은?");
     var myDataTag = await apiService.getMyTag();
 
     if (myDataTag != null && !myDataTag['data']['tags'].isEmpty) {
@@ -67,8 +65,6 @@ class _SelectTagScreenState extends State<SelectTagScreen> {
     } else {
       success = await apiService.postMyTag(tagData);
     }
-
-    print(success);
     if (success) {
       goIndex();
     }

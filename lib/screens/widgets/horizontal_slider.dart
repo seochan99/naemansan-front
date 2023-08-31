@@ -35,7 +35,6 @@ class _HorizontalSliderState extends State<HorizontalSlider> {
   @override
   void didUpdateWidget(HorizontalSlider oldWidget) {
     if (widget.keyword != oldWidget.keyword) {
-      print(widget.keyword);
       fetchItems(); // selectedKeyword 값이 변경되면 아이템을 다시 가져옵니다.
     }
     super.didUpdateWidget(oldWidget);
@@ -48,7 +47,6 @@ class _HorizontalSliderState extends State<HorizontalSlider> {
 
     // 키워드 기반
     if (widget.keyword != null) {
-      print(widget.keyword!);
       data = await apiService.getTagBasedCourseList(widget.keyword!);
     }
     // 위치기반

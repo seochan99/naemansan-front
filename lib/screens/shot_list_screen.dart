@@ -60,7 +60,7 @@ class _ShotListState extends State<ShotList> {
     setState(() {
       dataList = data ?? [];
     });
-    // print(data);
+    //
   }
 
   @override

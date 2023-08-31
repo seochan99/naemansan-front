@@ -170,7 +170,6 @@ class _CommentWidgetState extends State<CommentWidget> {
   }
 
   Future<void> deleteComment() async {
-    print("${widget.content} 삭제");
     ApiService apiService = ApiService();
     apiService.deleteComment(widget.course_id, widget.id);
   }

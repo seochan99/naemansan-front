@@ -9,7 +9,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class LoginBtn extends StatelessWidget {
   final String whatsLogin;
   final String logo;
@@ -17,8 +16,7 @@ class LoginBtn extends StatelessWidget {
   static const storage =
       FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
 
-
-  LoginBtn(
+  const LoginBtn(
       {super.key,
       required this.whatsLogin,
       required this.logo,
@@ -34,8 +32,6 @@ class LoginBtn extends StatelessWidget {
       const storage = FlutterSecureStorage();
       await storage.write(key: 'accessToken', value: accessToken);
       await storage.write(key: 'refreshToken', value: refreshToken);
-      print('save Access Token: $accessToken');
-      print('save Refresh Token: $refreshToken');
     }
 
     //로그인 성공 시
@@ -45,14 +41,6 @@ class LoginBtn extends StatelessWidget {
     }*/
 
     //유저 정보 확인
-
-    Future<bool> getLoginStatus() async {
-      userInfo = await storage.read(key: 'login');
-      userInfo == null ? isLogged = false : isLogged = true;
-      print("userInfo 가 있냐고 $userInfo");
-
-      return userInfo != null;
-    }
 
     // 저장된 토큰이 있는지 여부를 체크하는 함수
     /*    Future<bool> checkStoredTokens() async {
@@ -128,17 +116,14 @@ class LoginBtn extends StatelessWidget {
       } else {
         try {
           OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-
-          // 카카오계정으로 로그인 성공 처리
-          print("카카오 토큰은 Token : ${token.accessToken}");
           final response = await sendAuthRequestToServer(token.accessToken);
           if (response['success']) {
+            // jwt
             final jwtAccessToken = response['data']['jwt']['access_token'];
             final jwtRefreshTokenToken =
                 response['data']['jwt']['refresh_token'];
+            print("---- jwtAccessToken ----: $jwtAccessToken");
             await saveTokens(jwtAccessToken, jwtRefreshTokenToken);
-            print("서버에서 받은 JWT access_token: $jwtAccessToken");
-
             final prefs = await SharedPreferences.getInstance();
             prefs.setBool('isLogged', true);
 

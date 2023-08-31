@@ -22,13 +22,12 @@ class _DetailMapState extends State<DetailMap> {
   late double cameraLng;
   @override
   void initState() {
-    print(widget.locations);
     _drawPath();
     super.initState();
   }
 
   final MapType _mapType = MapType.Basic;
-  LatLng? _currentLocation;
+  // LatLng? _currentLocation;
   final Set<PathOverlay> _pathOverlays = {};
 
   void onMapCreated(NaverMapController controller) {
@@ -56,7 +55,6 @@ class _DetailMapState extends State<DetailMap> {
 
     setState(() {
       _pathOverlays.add(pathOverlay);
-      print(coordinates);
       startLat = coordinates.first.latitude;
       startLng = coordinates.first.longitude;
       lastLat = coordinates.last.latitude;

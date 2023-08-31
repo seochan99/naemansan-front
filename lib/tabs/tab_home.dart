@@ -83,20 +83,15 @@ class _HomeState extends State<Home> {
         // Tags exist
         if (data['data']['tags'].isEmpty) {
           // 테그 만들기 페이지로 이동
-          // go to SelectTagScreen
-          print(data['data']['tags']);
           if (mounted) {
             Navigator.pushNamedAndRemoveUntil(
                 context, '/tagSelect', (route) => false);
           }
-        } else {
-          print('Tags exist');
-        }
+        } else {}
         List<dynamic> tags = data['data']['tags'];
         myTagList = tags.map((tag) => tag['name'] as String).toList();
         // selectedKeyword = myTagList[0];
         selectedKeyword = "한강";
-        print(myTagList);
       } else {
         // Tags do not exist
         print('No tags found');
