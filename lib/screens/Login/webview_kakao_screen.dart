@@ -41,9 +41,7 @@ class _WebViewScreenKakaoState extends State<WebViewScreenKakao> {
     if (userInfo != null) {
       successLogin();
       // Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
-    } else {
-      print('로그인이 필요합니다');
-    }
+    } else {}
   }
 
   successLogin() {

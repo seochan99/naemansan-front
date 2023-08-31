@@ -69,7 +69,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ),
               onTap: () {
                 apiService.readNotification(notification.id);
-                print('읽음');
                 setState(() {});
                 // 알림 읽기 ...
               },
@@ -82,7 +81,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 onPressed: () async {
                                   await apiService
                                       .deleteNotification(notification.id);
-                                  print('삭제!');
                                   setState(() {});
                                   Navigator.pop(context);
                                 },
@@ -98,10 +96,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
     } else if (snapshot.hasError) {
       return Text('Error: ${snapshot.error}');
     } else {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: Column(
-            children: const [
+            children: [
               SizedBox(height: 170),
               Icon(Icons.notifications_none_rounded,
                   size: 60, color: Colors.grey),

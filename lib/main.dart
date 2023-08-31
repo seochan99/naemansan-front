@@ -77,7 +77,6 @@ class _AppState extends State<App> {
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
     if (deviceToken != null) {
-      print('isUserLoggedIn - deviceToken!=null');
       await sendDeviceToken(deviceToken, isIos);
     }
     //return accessToken != null;

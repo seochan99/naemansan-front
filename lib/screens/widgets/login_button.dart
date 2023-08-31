@@ -32,8 +32,6 @@ class LoginBtn extends StatelessWidget {
       const storage = FlutterSecureStorage();
       await storage.write(key: 'accessToken', value: accessToken);
       await storage.write(key: 'refreshToken', value: refreshToken);
-      print('save Access Token: $accessToken');
-      print('save Refresh Token: $refreshToken');
     }
 
     //로그인 성공 시
@@ -118,17 +116,13 @@ class LoginBtn extends StatelessWidget {
       } else {
         try {
           OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-
-          // 카카오계정으로 로그인 성공 처리
-          print("카카오 토큰은 Token : ${token.accessToken}");
           final response = await sendAuthRequestToServer(token.accessToken);
           if (response['success']) {
+            // jwt
             final jwtAccessToken = response['data']['jwt']['access_token'];
             final jwtRefreshTokenToken =
                 response['data']['jwt']['refresh_token'];
             await saveTokens(jwtAccessToken, jwtRefreshTokenToken);
-            print("서버에서 받은 JWT access_token: $jwtAccessToken");
-
             final prefs = await SharedPreferences.getInstance();
             prefs.setBool('isLogged', true);
 

@@ -39,9 +39,7 @@ class _WebViewAppleState extends State<WebViewApple> {
     if (userInfo != null) {
       successLogin();
       // Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
-    } else {
-      print('로그인이 필요합니다');
-    }
+    } else {}
   }
 
   successLogin() {
@@ -82,7 +80,6 @@ class _WebViewAppleState extends State<WebViewApple> {
         javascriptMode: JavascriptMode.unrestricted,
         gestureNavigationEnabled: true,
         navigationDelegate: (NavigationRequest request) async {
-          print("apple$request");
           if (request.url.startsWith(
               'https://appleid.apple.com/auth/authorize?client_id=com.dongguk.cse.naemansan&redirect_uri=https://ossp.dcs-hyungjoon.com/auth/apple/callback')) {
             // Callback URL reached, process the token

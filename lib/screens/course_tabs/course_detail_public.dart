@@ -44,7 +44,6 @@ class _CourseDetailState extends State<CourseDetail> {
   @override
   void initState() {
     super.initState();
-    print(widget.id);
     fetchTrailDetail();
     TrailapiService = TrailApiService();
   }
@@ -55,7 +54,6 @@ class _CourseDetailState extends State<CourseDetail> {
 
     data = await apiService
         .getEnrollmentCourseDetailById(widget.id); //등록한 (enrolled) 산책로
-    print(data);
 
     if (data != null) {
       setState(() {
@@ -167,12 +165,10 @@ class _CourseDetailState extends State<CourseDetail> {
     Map<String, dynamic> commentData = {
       "content": comment,
     };
-    print("dsadsadsa ${widget.id} ,$commentData");
 
     data = await apiService.addComment(widget.id, commentData);
-    print(data);
+
     if (data) {
-      print("댓글 성공");
       setState(() {
         // isLikeNow = true;
         // trailDetail!.likeCnt++;
@@ -201,13 +197,11 @@ class _CourseDetailState extends State<CourseDetail> {
 
   // 좋아요 Delete 보내기
   Future<void> deleteLike() async {
-    print("삭제!");
     ApiService apiService = ApiService();
     bool data;
 
     data = await apiService.unlikeCourse(widget.id);
     if (data) {
-      print("좋아요 삭제");
       setState(() {
         isLikeNow = false;
         trailDetail!.likeCnt--;
@@ -217,7 +211,6 @@ class _CourseDetailState extends State<CourseDetail> {
 
   //산책로 Delete
   Future<void> deleteTrail() async {
-    print("${trailDetail!.title} 삭제");
     ApiService apiService = ApiService();
 
     apiService.deleteEnrollmentCourse(widget.id);
@@ -227,10 +220,6 @@ class _CourseDetailState extends State<CourseDetail> {
   Widget build(BuildContext context) {
     final Future<List<CommentModel>?> commentlist =
         TrailapiService.viewComment(widget.id, 0, 1000);
-
-    //widgetId, page, num
-
-    print(trailDetail);
     if (trailDetail == null) {
       return const Scaffold(
         body: Center(
@@ -444,8 +433,8 @@ class _CourseDetailState extends State<CourseDetail> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.isEmpty) {
-                      return Column(
-                        children: const [
+                      return const Column(
+                        children: [
                           SizedBox(
                             height: 10,
                           ),

@@ -210,9 +210,6 @@ class _NaverMapScreenState extends State<NaverMapScreen> {
                   });
                 }
               }
-              print("ASDASDSADASDASD");
-              print(coordinates);
-              print("ASDASDSADASDASD");
               await Navigator.pushNamed(
                 context,
                 '/createTitle',

@@ -27,7 +27,6 @@ class _IndexScreenState extends State<IndexScreen> {
 
   Future<void> getLoginStatus() async {
     userInfo = await storage.read(key: 'login');
-    print("userInfo 가 있냐고 $userInfo");
 
     if (userInfo == null) {
       goLogin();

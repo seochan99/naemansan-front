@@ -31,7 +31,6 @@ class _IndivCourseDetailState extends State<IndivCourseDetail> {
   @override
   void initState() {
     super.initState();
-    print(widget.id);
     fetchTrailDetail();
     fetchUserInfo();
   }
@@ -41,12 +40,10 @@ class _IndivCourseDetailState extends State<IndivCourseDetail> {
     ApiService apiService = ApiService();
     // 서버에 POST 요청을 보내는 로직을 추가해야 합니다.
     // selectedTags 리스트를 서버에 전송
-    print("산책로 공개");
   }
 
   //산책로 Delete
   Future<void> deleteTrail() async {
-    print("----- 개인 산책로 삭제");
     ApiService apiService = ApiService();
 
     apiService.deleteIndiviudalCourse(widget.id);
@@ -57,7 +54,6 @@ class _IndivCourseDetailState extends State<IndivCourseDetail> {
     Map<String, dynamic>? data;
 
     data = await apiService.getIndividualmentCourseDetailById(widget.id);
-    print(data);
 
     if (data != null) {
       setState(() {
@@ -80,7 +76,6 @@ class _IndivCourseDetailState extends State<IndivCourseDetail> {
 
   @override
   Widget build(BuildContext context) {
-    print(trailDetail);
     if (trailDetail == null) {
       return const Scaffold(
         body: Center(
@@ -152,8 +147,8 @@ class _IndivCourseDetailState extends State<IndivCourseDetail> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Column(
-                    children: const [],
+                  const Column(
+                    children: [],
                   ),
                 ],
               ),

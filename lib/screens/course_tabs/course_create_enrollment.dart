@@ -35,7 +35,6 @@ class _CreateErollmentCourseScreenState
     ApiService apiService = ApiService();
 
     if (introduction.isEmpty) {
-      print("내용을 입력해주세요");
       return;
     }
     final arguments =
