@@ -35,10 +35,7 @@ class _SettingsState extends State<Settings> {
     // 카카오 로그아웃 처리
     try {
       await UserApi.instance.logout();
-      print("카카오 로그아웃 성공");
-    } catch (error) {
-      print("카카오 로그아웃 실패: $error");
-    }
+    } catch (error) {}
 
     await deleteTokens();
     await storage.delete(key: 'login');

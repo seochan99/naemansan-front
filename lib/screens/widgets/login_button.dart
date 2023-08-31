@@ -122,6 +122,7 @@ class LoginBtn extends StatelessWidget {
             final jwtAccessToken = response['data']['jwt']['access_token'];
             final jwtRefreshTokenToken =
                 response['data']['jwt']['refresh_token'];
+            print("---- jwtAccessToken ----: $jwtAccessToken");
             await saveTokens(jwtAccessToken, jwtRefreshTokenToken);
             final prefs = await SharedPreferences.getInstance();
             prefs.setBool('isLogged', true);

@@ -29,7 +29,7 @@ class _ViewProfileState extends State<ViewProfile> {
     ApiService apiService = ApiService();
     Map<String, dynamic>? data =
         await apiService.getOtherUserProfile(widget.userId);
-    print("asdasdsadsa");
+
     Map<String, dynamic>? followerListData = await apiService.getFollower();
 
     if (followerListData['success'] == true) {
@@ -64,7 +64,7 @@ class _ViewProfileState extends State<ViewProfile> {
         }
       }
     }
-    print("asdasdsadsa");
+
     if (data != null) {
       setState(() {
         otherUser = OtherUserModel.fromJson(data);

@@ -93,6 +93,7 @@ class _AppState extends State<App> {
     return (deviceToken == null) ? "" : deviceToken;
   }
 
+  // device 토큰 저장
   Future<void> sendDeviceToken(String deviceToken, bool isIos) async {
     try {
       Map<String, dynamic> requestBody = {
@@ -108,9 +109,7 @@ class _AppState extends State<App> {
       } else {
         print('sendDeviceToken - Failure: ${response.statusCode}');
       }
-    } catch (error) {
-      print('sendDeviceToken - Error: $error');
-    }
+    } catch (error) {}
   }
 
   @override
