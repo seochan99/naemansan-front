@@ -8,7 +8,7 @@ import 'package:naemansan/screens/screen_index.dart';
 
 class Editpage extends StatefulWidget {
   final String userName;
-  final String userIntro;
+  final String? userIntro;
 
   const Editpage({Key? key, required this.userName, required this.userIntro})
       : super(key: key);
@@ -22,7 +22,7 @@ class _EditpageState extends State<Editpage> {
   static const storage = FlutterSecureStorage();
   late ApiService apiService;
   late String newName;
-  late String newIntro;
+  late String? newIntro;
 
   // Fetch user info
   Future<Map<String, dynamic>?> fetchUserInfo() async {
