@@ -482,7 +482,7 @@ class _CourseDetailState extends State<CourseDetail> {
                     onPressed: () {
                       postComment();
                       _commentController.clear();
-                      // addComment('New comment');
+                      //addComment('New comment');
                     },
                   ),
                 ),
@@ -512,6 +512,7 @@ class _CourseDetailState extends State<CourseDetail> {
         ),
         backgroundColor: Colors.white,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
 
