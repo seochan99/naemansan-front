@@ -99,6 +99,7 @@ class _CourseDetailState extends State<CourseDetail> {
         var trail = snapshot.data![index];
 
         return CommentWidget(
+          created_date: trail.created_date,
           content: trail.content,
           user_id: trail.user_id, //댓글 작성자의 user id
           course_id: trail.course_id,

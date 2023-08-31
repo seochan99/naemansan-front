@@ -71,6 +71,7 @@ class _MyrailState extends State<Myrail> with SingleTickerProviderStateMixin {
           var trail = data;
 
           return CommentTrailWidget(
+            user_name: trail.user_name,
             id: trail.id,
             courseId: trail.courseId,
             title: trail.title,

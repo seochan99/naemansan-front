@@ -3,6 +3,7 @@ import 'package:naemansan/screens/course_tabs/course_detail_public.dart';
 
 class CommentTrailWidget extends StatelessWidget {
   final int id;
+  final String user_name;
   final String content;
   final String title;
   final int courseId;
@@ -10,6 +11,7 @@ class CommentTrailWidget extends StatelessWidget {
 
   const CommentTrailWidget({
     Key? key,
+    required this.user_name,
     required this.id,
     required this.content,
     required this.title,
