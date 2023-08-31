@@ -134,7 +134,8 @@ class ApiService {
         // print(parsedResponse['data']);
         return parsedResponse['data'];
       } else {
-        print('유저 정보 가져오기 실패 - ${response.statusCode}');
+        print(
+            '유저 정보 가져오기 실패 상태코드: ${response.statusCode}, 헤더: ${response.headers}, 바디 : ${response.body}, request: ${response.request} ');
         return null;
       }
     } catch (e) {
@@ -691,6 +692,41 @@ class ApiService {
   }
 
 //--------산책로 댓글 ----------------
+// 카카오 post
+  Future<Map<String, String>?> postKakaoLogin(token) async {
+    try {
+      //여기
+      final response = await postRequest('auth/kakao', token);
+
+      if (response.statusCode == 200) {
+        print('카카오 post 성공 ${response.body}');
+
+        // 서버 응답에서 토큰 추출
+        final tokenMap = extractTokens(response.body);
+        return tokenMap;
+      } else {
+        print(
+            '카카오 post 실패 - 상태 코드: ${response.statusCode} ${response.request}');
+        return null;
+      }
+    } catch (error) {
+      print('카카오 post 실패 - 예외 발생: $error');
+      return null;
+    }
+  }
+
+  Map<String, String> extractTokens(String responseBody) {
+    final jsonResponse = json.decode(responseBody);
+    final jwtData = jsonResponse['data']['jwt'];
+
+    final accessToken = jwtData['access_token'];
+    final refreshToken = jwtData['refresh_token'];
+
+    return {
+      'accessToken': accessToken,
+      'refreshToken': refreshToken,
+    };
+  }
 
 // 작성한 댓글
 

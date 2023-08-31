@@ -22,7 +22,7 @@ class _IndexScreenState extends State<IndexScreen> {
   void initState() {
     super.initState();
     currentIndex = widget.index;
-    getLoginStatus();
+    // getLoginStatus(); 당분간 사용하지 않습니다
   }
 
   Future<void> getLoginStatus() async {

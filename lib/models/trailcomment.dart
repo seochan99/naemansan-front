@@ -2,12 +2,14 @@
 class TrailCommentModel {
   final int id;
   final int courseId;
+  final String user_name;
   final String title;
   final String content;
   final List<String> tags;
 
   TrailCommentModel({
     required this.id,
+    required this.user_name,
     required this.courseId,
     required this.title,
     required this.content,
@@ -19,6 +21,7 @@ class TrailCommentModel {
       id: json['id'],
       courseId: json['course_id'],
       title: json['course_title'],
+      user_name: json['user_name'],
       content: json['content'],
       tags: List<String>.from(json['tags'].map((tag) => tag['name'])),
     );
