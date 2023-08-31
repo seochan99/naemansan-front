@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
 import 'package:naemansan/services/login_api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -30,6 +31,15 @@ class _SettingsState extends State<Settings> {
     ApiService apiService = ApiService();
     // 서버 로그아웃 처리
     await apiService.serverLogout();
+
+    // 카카오 로그아웃 처리
+    try {
+      await UserApi.instance.logout();
+      print("카카오 로그아웃 성공");
+    } catch (error) {
+      print("카카오 로그아웃 실패: $error");
+    }
+
     await deleteTokens();
     await storage.delete(key: 'login');
 
@@ -90,14 +100,14 @@ class _SettingsState extends State<Settings> {
                 onTap: () {
                   // 스토어 연결
                 },
-                child: Row(
+                child: const Row(
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        padding: EdgeInsets.symmetric(vertical: 4.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               '버전 정보',
                               style: TextStyle(
@@ -128,8 +138,8 @@ class _SettingsState extends State<Settings> {
                 onTap: () {
                   // 고객센터 문의하기
                 },
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 4.0),
@@ -153,8 +163,8 @@ class _SettingsState extends State<Settings> {
                 onTap: () {
                   logout();
                 },
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 4.0),
@@ -176,8 +186,8 @@ class _SettingsState extends State<Settings> {
               padding: const EdgeInsets.all(13.0),
               child: InkWell(
                 onTap: () => _showDialog(context),
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 4.0),

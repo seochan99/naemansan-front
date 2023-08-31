@@ -9,7 +9,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class LoginBtn extends StatelessWidget {
   final String whatsLogin;
   final String logo;
@@ -17,8 +16,7 @@ class LoginBtn extends StatelessWidget {
   static const storage =
       FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
 
-
-  LoginBtn(
+  const LoginBtn(
       {super.key,
       required this.whatsLogin,
       required this.logo,
@@ -45,14 +43,6 @@ class LoginBtn extends StatelessWidget {
     }*/
 
     //유저 정보 확인
-
-    Future<bool> getLoginStatus() async {
-      userInfo = await storage.read(key: 'login');
-      userInfo == null ? isLogged = false : isLogged = true;
-      print("userInfo 가 있냐고 $userInfo");
-
-      return userInfo != null;
-    }
 
     // 저장된 토큰이 있는지 여부를 체크하는 함수
     /*    Future<bool> checkStoredTokens() async {
