@@ -1,14 +1,14 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:naemansan/screens/Login/webview_apple_screen.dart';
 import 'package:naemansan/screens/Login/webview_google_screen.dart';
-import 'package:naemansan/screens/Login/webview_kakao_screen.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class LoginBtn extends StatelessWidget {
   final String whatsLogin;
@@ -17,7 +17,8 @@ class LoginBtn extends StatelessWidget {
   static const storage =
       FlutterSecureStorage(); // FlutterSecureStorage를 storage로 저장
 
-  const LoginBtn(
+
+  LoginBtn(
       {super.key,
       required this.whatsLogin,
       required this.logo,
@@ -27,16 +28,43 @@ class LoginBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void kakaoLogin(String loginUrl) {
-      Navigator.push(
-        routeContext, // 네비게이션을 위한 BuildContext
-        MaterialPageRoute(
-          builder: (context) => WebViewScreenKakao(
-              loginUrl: loginUrl), // loginUrl 값을 전달하여 WebViewScreenKakao를 생성
-        ),
-      );
+    //기기에 토큰 저장
+
+    Future<void> saveTokens(String accessToken, String refreshToken) async {
+      const storage = FlutterSecureStorage();
+      await storage.write(key: 'accessToken', value: accessToken);
+      await storage.write(key: 'refreshToken', value: refreshToken);
+      print('save Access Token: $accessToken');
+      print('save Refresh Token: $refreshToken');
     }
 
+    //로그인 성공 시
+    /*
+    successLogin() {
+      Navigator.pushNamedAndRemoveUntil(context, '/index', (route) => false);
+    }*/
+
+    //유저 정보 확인
+
+    Future<bool> getLoginStatus() async {
+      userInfo = await storage.read(key: 'login');
+      userInfo == null ? isLogged = false : isLogged = true;
+      print("userInfo 가 있냐고 $userInfo");
+
+      return userInfo != null;
+    }
+
+    // 저장된 토큰이 있는지 여부를 체크하는 함수
+    /*    Future<bool> checkStoredTokens() async {
+      const storage = FlutterSecureStorage();
+      String? accessToken = await storage.read(key: 'accessToken');
+      String? refreshToken = await storage.read(key: 'refreshToken');
+      print('stored Access Token: $accessToken');
+      print('stored Refresh Token: $refreshToken');
+      return accessToken != null && refreshToken != null;
+    }
+*/
+    //구글 로그인
     void googleLogin(String loginUrl) {
       Navigator.push(
         context,

@@ -11,9 +11,11 @@ class CommentWidget extends StatefulWidget {
   final int course_id; //코스 아이디
   final int id; // 댓글 아이디
   final String user_name;
+  final DateTime created_date;
 
   const CommentWidget({
     Key? key,
+    required this.created_date,
     required this.id,
     required this.course_id,
     required this.content,
@@ -55,25 +57,49 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            widget.content,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(width: 10),
+                    Text(
+                      widget.user_name,
+                      style: const TextStyle(fontSize: 17),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  widget.content,
+                  style: const TextStyle(fontSize: 20),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  widget.created_date.toString(),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 10,
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        if (isWriter) // 현재 사용자인 경우에만 아이콘 버튼 표시
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              _showPopupMenu(context);
-            },
-          ),
-      ],
+          if (isWriter)
+            IconButton(
+              icon: const Icon(Icons.more_vert),
+              onPressed: () {
+                _showPopupMenu(context);
+              },
+            ),
+        ],
+      ),
     );
   }
 

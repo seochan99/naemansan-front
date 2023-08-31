@@ -99,6 +99,7 @@ class _CourseDetailState extends State<CourseDetail> {
         var trail = snapshot.data![index];
 
         return CommentWidget(
+          created_date: trail.created_date,
           content: trail.content,
           user_id: trail.user_id, //댓글 작성자의 user id
           course_id: trail.course_id,
@@ -482,7 +483,7 @@ class _CourseDetailState extends State<CourseDetail> {
                     onPressed: () {
                       postComment();
                       _commentController.clear();
-                      // addComment('New comment');
+                      //addComment('New comment');
                     },
                   ),
                 ),
@@ -512,6 +513,7 @@ class _CourseDetailState extends State<CourseDetail> {
         ),
         backgroundColor: Colors.white,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
 
