@@ -30,8 +30,8 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   // 로그인 여부 확인
-  // final isLoggedin = prefs.getBool('isLoggedIn') ?? false;
-  KakaoSdk.init(nativeAppKey: "${dotenv.env['YOUR_NATIVE_APP_KEY']}");
+  //final isLoggedin = prefs.getBool('isLoggedIn') ?? false;
+  KakaoSdk.init(nativeAppKey: "05bf0ff2954bc573bba42b538554c4b5");
   runApp(
     MultiProvider(
       providers: [
@@ -77,9 +77,10 @@ class _AppState extends State<App> {
     bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
     if (deviceToken != null) {
+      print('isUserLoggedIn - deviceToken!=null');
       await sendDeviceToken(deviceToken, isIos);
     }
-
+    //return accessToken != null;
     return accessToken != null && refreshToken != null;
   }
 
@@ -126,7 +127,8 @@ class _AppState extends State<App> {
         } else {
           return MaterialApp(
             title: '내가 만든 산책로',
-            home: isLogged ? const IndexScreen(index: 0) : const LoginScreen(),
+            home: const IndexScreen(index: 0), //islogged 당분간 체크 안하겠습니다
+
             routes: {
               '/index': (context) => const IndexScreen(index: 0),
               '/login': (context) => const LoginScreen(),
