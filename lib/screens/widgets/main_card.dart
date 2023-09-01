@@ -30,6 +30,13 @@ class CardWidget extends StatelessWidget {
   final List<String> keywords;
   final String created_date;
 
+  String truncateString(String str) {
+    if (str.length > 7) {
+      return "${str.substring(0, 7)}...";
+    }
+    return str;
+  }
+
   const CardWidget({
     Key? key,
     required this.id,
@@ -98,7 +105,7 @@ class CardWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Icon(iconList[id % 4]),
-                  Text("#${keywords[0]}#${keywords[1]}"),
+                  Text(truncateString("#${keywords[0]}#${keywords[1]}")),
                 ],
               ),
             ],
