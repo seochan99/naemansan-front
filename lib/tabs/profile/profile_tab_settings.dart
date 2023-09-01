@@ -97,14 +97,14 @@ class _SettingsState extends State<Settings> {
                 onTap: () {
                   // 스토어 연결
                 },
-                child: const Row(
+                child: Row(
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 4.0),
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: const [
                             Text(
                               '버전 정보',
                               style: TextStyle(
@@ -135,8 +135,8 @@ class _SettingsState extends State<Settings> {
                 onTap: () {
                   // 고객센터 문의하기
                 },
-                child: const Row(
-                  children: [
+                child: Row(
+                  children: const [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 4.0),
@@ -160,8 +160,8 @@ class _SettingsState extends State<Settings> {
                 onTap: () {
                   logout();
                 },
-                child: const Row(
-                  children: [
+                child: Row(
+                  children: const [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 4.0),
@@ -183,8 +183,8 @@ class _SettingsState extends State<Settings> {
               padding: const EdgeInsets.all(13.0),
               child: InkWell(
                 onTap: () => _showDialog(context),
-                child: const Row(
-                  children: [
+                child: Row(
+                  children: const [
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 4.0),
