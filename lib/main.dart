@@ -32,6 +32,7 @@ void main() async {
   // 로그인 여부 확인
   //final isLoggedin = prefs.getBool('isLoggedIn') ?? false;
   KakaoSdk.init(nativeAppKey: "05bf0ff2954bc573bba42b538554c4b5");
+
   runApp(
     MultiProvider(
       providers: [
@@ -125,8 +126,7 @@ class _AppState extends State<App> {
         } else {
           return MaterialApp(
             title: '내가 만든 산책로',
-            home: const IndexScreen(index: 0), //islogged 당분간 체크 안하겠습니다
-
+            home: isLogged ? const IndexScreen(index: 0) : const LoginScreen(),
             routes: {
               '/index': (context) => const IndexScreen(index: 0),
               '/login': (context) => const LoginScreen(),
