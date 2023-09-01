@@ -168,7 +168,7 @@ class _TrailState extends State<Trail> with SingleTickerProviderStateMixin {
             child: FutureBuilder(
               future: RecommendTrail,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   return Row(
                     children: [Expanded(child: makeList(snapshot))],
                   );

@@ -73,11 +73,11 @@ class TrailApiService {
     try {
       final response =
           await getRequest('course/list/recommend?page=$page&num=$num');
-
       if (response.statusCode == 200) {
         final parsedResponse =
             jsonDecode(response.body) as Map<String, dynamic>;
         final trails = parsedResponse['data'] as List<dynamic>;
+
         List<TraillistModel> courseInstances = [];
         for (var trail in trails) {
           final instance = TraillistModel.fromJson(trail);
@@ -85,7 +85,6 @@ class TrailApiService {
         }
         return courseInstances;
       } else {
-        print('추천순 전체 산책로 조회 GET 요청 실패 - 상태 코드: ${response.statusCode}');
         return null;
       }
     } catch (e) {

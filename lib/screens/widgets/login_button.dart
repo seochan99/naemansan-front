@@ -42,16 +42,6 @@ class LoginBtn extends StatelessWidget {
 
     //유저 정보 확인
 
-    // 저장된 토큰이 있는지 여부를 체크하는 함수
-    /*    Future<bool> checkStoredTokens() async {
-      const storage = FlutterSecureStorage();
-      String? accessToken = await storage.read(key: 'accessToken');
-      String? refreshToken = await storage.read(key: 'refreshToken');
-      print('stored Access Token: $accessToken');
-      print('stored Refresh Token: $refreshToken');
-      return accessToken != null && refreshToken != null;
-    }
-*/
     //구글 로그인
     void googleLogin(String loginUrl) {
       Navigator.push(
@@ -95,7 +85,26 @@ class LoginBtn extends StatelessWidget {
     kakaoLoginUseSDK() async {
       if (await isKakaoTalkInstalled()) {
         try {
-          await UserApi.instance.loginWithKakaoTalk();
+          // 로그인 성공 후 토큰 가져오기
+          OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
+          final response = await sendAuthRequestToServer(token.accessToken);
+          if (response['success']) {
+            // jwt
+            final jwtAccessToken = response['data']['jwt']['access_token'];
+            final jwtRefreshTokenToken =
+                response['data']['jwt']['refresh_token'];
+            await saveTokens(jwtAccessToken, jwtRefreshTokenToken);
+            final prefs = await SharedPreferences.getInstance();
+            prefs.setBool('isLogged', true);
+            await storage.write(
+              key: 'login',
+              value: jwtAccessToken,
+            );
+
+            successLogin();
+          } else {
+            print("서버에서 에러 발생: ${response['error']}");
+          }
           // 카카오톡으로 로그인 성공 처리
         } catch (error) {
           // 카카오톡으로 로그인 실패 처리
