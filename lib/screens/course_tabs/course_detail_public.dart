@@ -125,6 +125,7 @@ class _CourseDetailState extends State<CourseDetail> {
 
     if (data) {
       setState(() {
+        isWriter == true;
         // isLikeNow = true;
         // trailDetail!.likeCnt++;
       });
