@@ -317,17 +317,22 @@ class ApiService {
 // 본인 프로필 수정
   Future<http.Response> updateProfilePicture(File imageFile) async {
     try {
-      final accessToken = await getTokens();
-      final uri = Uri.parse('image/user');
+      final tokens = await getTokens();
+      final accessToken = tokens['accessToken'];
+      final uri = Uri.parse('https://ossp.dcs-hyungjoon.com/image/user');
 
       final request = http.MultipartRequest('POST', uri);
       request.headers['Authorization'] = 'Bearer $accessToken';
 
       final fileStream = http.ByteStream(imageFile.openRead());
       final fileLength = await imageFile.length();
+
       final multipartFile = http.MultipartFile(
-          'profile_picture', fileStream, fileLength,
-          filename: 'profile_picture.jpg');
+        'image',
+        fileStream,
+        fileLength,
+        filename: 'image.png', //jpg랑 png둘 다 받게 바꾸기
+      );
 
       request.files.add(multipartFile);
 
@@ -342,7 +347,7 @@ class ApiService {
       return http.Response.fromStream(response);
     } catch (e) {
       print('프로필 사진 수정 POST 요청 실패 - $e');
-      return http.Response('Error', 500);
+      return http.Response('Error', 0);
     }
   }
 
