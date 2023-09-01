@@ -427,6 +427,7 @@ class _CourseDetailState extends State<CourseDetail> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              const SizedBox(height: 24),
               FutureBuilder(
                 //!! 스크롤 문제
                 future: commentlist,
@@ -477,6 +478,7 @@ class _CourseDetailState extends State<CourseDetail> {
                   ),
                 ),
               ),
+              const SizedBox(height: 100),
             ],
           ),
         ),
@@ -502,7 +504,7 @@ class _CourseDetailState extends State<CourseDetail> {
         ),
         backgroundColor: Colors.white,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
