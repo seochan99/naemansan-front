@@ -147,7 +147,7 @@ class _IndivCourseDetailState extends State<IndivCourseDetail> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Column(
+                  Column(
                     children: [],
                   ),
                 ],

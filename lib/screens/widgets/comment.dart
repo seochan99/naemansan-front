@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:naemansan/services/login_api_service.dart';
 import 'package:naemansan/screens/comment_edit.dart';
-
+import 'package:naemansan/models/otheruser.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // 산책로 디테일 페이지에서 댓글 볼 때 사용
@@ -32,27 +32,39 @@ class _CommentWidgetState extends State<CommentWidget> {
   static const storage = FlutterSecureStorage();
   dynamic userInfo = '';
   late bool isWriter; // 댓글 작성자와 현재 사용자를 비교한 결과를 저장할 변수
+  OtherUserModel? otherUser;
+  late String imagePath;
 
-  // Fetch user info
-  Future<Map<String, dynamic>?> fetchUserInfo() async {
+// Fetch user info
+  Future<void> fetchUserInfo() async {
     ApiService apiService = ApiService();
-    Map<String, dynamic>? userInfo = await apiService.getUserInfo();
-    String myName = userInfo?['name'];
+    Map<String, dynamic>? data, myData;
 
-    if (myName == widget.user_name) {
+    myData = await apiService.getUserInfo();
+    data = await apiService.getOtherUserProfile(widget.user_id);
+
+    if (mounted) {
       setState(() {
-        isWriter = true;
+        myData!['name'] == data!['name'] ? isWriter = true : isWriter = false;
+        //otherUser = OtherUserModel.fromJson(data);
+        //imagePath =
+        //  'https://ossp.dcs-hyungjoon.com/image?uuid=${otherUser!.imagePath}';
+        if (isWriter == true) {
+          imagePath = myData['image_path'];
+        } else {
+          imagePath =
+              'https://ossp.dcs-hyungjoon.com/image?uuid=${data['image_path']}';
+        }
       });
     }
-
-    return userInfo;
   }
 
   @override
   void initState() {
     super.initState();
-    user = fetchUserInfo();
+    fetchUserInfo();
     isWriter = false; // 초기값으로 false 설정
+    imagePath = ''; //초기값
   }
 
   @override
@@ -68,6 +80,12 @@ class _CommentWidgetState extends State<CommentWidget> {
               children: [
                 Row(
                   children: [
+// 이미지 불러오기 (높이, 넓이 40 40 )
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(imagePath), // 이미지 표시
+                    ),
+
                     const SizedBox(width: 10),
                     Text(
                       widget.user_name,

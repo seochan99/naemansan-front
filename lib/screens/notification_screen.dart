@@ -96,10 +96,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
     } else if (snapshot.hasError) {
       return Text('Error: ${snapshot.error}');
     } else {
-      return const Scaffold(
+      return Scaffold(
         body: Center(
           child: Column(
-            children: [
+            children: const [
               SizedBox(height: 170),
               Icon(Icons.notifications_none_rounded,
                   size: 60, color: Colors.grey),
