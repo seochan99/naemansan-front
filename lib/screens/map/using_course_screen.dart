@@ -242,11 +242,7 @@ class _UsingCourseScreenState extends State<UsingCourseScreen> {
 
     checkLocation();
 
-    if (startLocation) {
-      startLocation = false;
-      return true;
-    } else if (endLocation) {
-      endLocation = false;
+    if (startLocation || endLocation) {
       return true;
     } else {
       return false;
@@ -322,8 +318,12 @@ class _UsingCourseScreenState extends State<UsingCourseScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: isInsideRoute(_currentLocation ?? const LatLng(0, 0))
-            ? cantWalking
-            : (isCourseStarted ? endCourse : startCourse),
+            ? endCourse
+            : (isCourseStarted
+                ? endCourse
+                : (startLocation || endLocation)
+                    ? cantWalking
+                    : startCourse),
         label: Text(
           isCourseStarted ? '산책 종료하기' : '산책 시작하기',
           style: const TextStyle(
