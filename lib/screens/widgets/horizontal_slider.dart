@@ -56,6 +56,7 @@ class _HorizontalSliderState extends State<HorizontalSlider> {
     }
 
     // 데이터가 있을때
+
     if (data != null) {
       final items = data
           .map((item) => SlideItem(

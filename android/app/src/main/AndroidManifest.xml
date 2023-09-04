@@ -50,5 +50,6 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="rfcha6peuj" />
+        <uses-library android:name="org.conscrypt" android:required="false"/>
     </application>
 </manifest>
