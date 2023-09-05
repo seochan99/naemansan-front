@@ -36,9 +36,11 @@ class _CourseDetailState extends State<CourseDetail> {
 
   void addComment(String comment) {
     //산책로 댓글 등록
-    setState(() {
-      comments.add(comment);
-    });
+    if (mounted) {
+      setState(() {
+        comments.add(comment);
+      });
+    }
   }
 
   @override
@@ -56,11 +58,13 @@ class _CourseDetailState extends State<CourseDetail> {
         .getEnrollmentCourseDetailById(widget.id); //등록한 (enrolled) 산책로
 
     if (data != null) {
-      setState(() {
-        trailDetail = TraildetailModel.fromJson(data!);
-        isLikeNow = trailDetail!.isLiked;
-      });
-      fetchWriterProfile();
+      if (mounted) {
+        setState(() {
+          trailDetail = TraildetailModel.fromJson(data!);
+          isLikeNow = trailDetail!.isLiked;
+        });
+        fetchWriterProfile();
+      }
     }
   }
 
@@ -124,11 +128,13 @@ class _CourseDetailState extends State<CourseDetail> {
     data = await apiService.addComment(widget.id, commentData);
 
     if (data) {
-      setState(() {
-        isWriter == true;
-        // isLikeNow = true;
-        // trailDetail!.likeCnt++;
-      });
+      if (mounted) {
+        setState(() {
+          isWriter == true;
+          // isLikeNow = true;
+          // trailDetail!.likeCnt++;
+        });
+      }
     }
   }
 
@@ -144,10 +150,12 @@ class _CourseDetailState extends State<CourseDetail> {
     data = await apiService.likeCourse(widget.id);
     if (data) {
       // print("좋아요 성공");
-      setState(() {
-        isLikeNow = true;
-        trailDetail!.likeCnt++;
-      });
+      if (mounted) {
+        setState(() {
+          isLikeNow = true;
+          trailDetail!.likeCnt++;
+        });
+      }
     }
   }
 
@@ -158,10 +166,12 @@ class _CourseDetailState extends State<CourseDetail> {
 
     data = await apiService.unlikeCourse(widget.id);
     if (data) {
-      setState(() {
-        isLikeNow = false;
-        trailDetail!.likeCnt--;
-      });
+      if (mounted) {
+        setState(() {
+          isLikeNow = false;
+          trailDetail!.likeCnt--;
+        });
+      }
     }
   }
 

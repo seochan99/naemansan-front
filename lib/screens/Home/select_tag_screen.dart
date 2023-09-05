@@ -33,15 +33,17 @@ class _SelectTagScreenState extends State<SelectTagScreen> {
   }
 
   void toggleTagSelection(String tag) {
-    setState(() {
-      if (selectedTags.any((element) => element['name'] == tag)) {
-        selectedTags.removeWhere((element) => element['name'] == tag);
-      } else {
-        if (selectedTags.length < 3) {
-          selectedTags.add({'name': tag, 'status': 'NEW'});
+    if (mounted) {
+      setState(() {
+        if (selectedTags.any((element) => element['name'] == tag)) {
+          selectedTags.removeWhere((element) => element['name'] == tag);
+        } else {
+          if (selectedTags.length < 3) {
+            selectedTags.add({'name': tag, 'status': 'NEW'});
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   goIndex() {

@@ -142,9 +142,11 @@ class _EditpageState extends State<Editpage> {
                                 ),
                               );
                               if (result == true) {
-                                setState(() {
-                                  user = fetchUserInfo(); // 사용자 정보 다시 불러오기
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    user = fetchUserInfo(); // 사용자 정보 다시 불러오기
+                                  });
+                                }
                               }
                             },
                           ),
@@ -185,8 +187,11 @@ class _EditpageState extends State<Editpage> {
                                     ),
                                   )
                                       .then((value) {
-                                    newName = value; // 수정된 값을 대입
-                                    setState(() {});
+                                    newName = value;
+                                    if (mounted) {
+                                      // 수정된 값을 대입
+                                      setState(() {});
+                                    }
                                   });
                                 },
                               ),
@@ -235,7 +240,9 @@ class _EditpageState extends State<Editpage> {
                                   )
                                       .then((value) {
                                     newIntro = value;
-                                    setState(() {});
+                                    if (mounted) {
+                                      setState(() {});
+                                    }
                                   });
                                 },
                               ),

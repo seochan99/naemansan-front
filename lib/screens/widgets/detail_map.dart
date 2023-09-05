@@ -53,15 +53,17 @@ class _DetailMapState extends State<DetailMap> {
       outlineColor: Colors.transparent,
     );
 
-    setState(() {
-      _pathOverlays.add(pathOverlay);
-      startLat = coordinates.first.latitude;
-      startLng = coordinates.first.longitude;
-      lastLat = coordinates.last.latitude;
-      lastLng = coordinates.last.longitude;
-      cameraLat = (startLat + lastLat) / 2;
-      cameraLng = (startLng + lastLng) / 2;
-    });
+    if (mounted) {
+      setState(() {
+        _pathOverlays.add(pathOverlay);
+        startLat = coordinates.first.latitude;
+        startLng = coordinates.first.longitude;
+        lastLat = coordinates.last.latitude;
+        lastLng = coordinates.last.longitude;
+        cameraLat = (startLat + lastLat) / 2;
+        cameraLng = (startLng + lastLng) / 2;
+      });
+    }
   }
 
   @override

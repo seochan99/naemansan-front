@@ -56,9 +56,11 @@ class _PublicCourseDetailScreenState extends State<PublicCourseDetailScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    setState(() {
-                      isUnderReview = true;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        isUnderReview = true;
+                      });
+                    }
                     showDialog(
                       context: context,
                       builder: (context) {

@@ -38,9 +38,11 @@ class _ViewProfileState extends State<ViewProfile> {
       if (dataList.isEmpty) {
         // 'data'가 비어있는 경우 처리
         print('데이터가 비어있습니다.');
-        setState(() {
-          isFollwer = false;
-        });
+        if (mounted) {
+          setState(() {
+            isFollwer = false;
+          });
+        }
       } else {
         // 'data'에 아이템이 있는 경우 처리
         for (var item in dataList) {
@@ -54,9 +56,11 @@ class _ViewProfileState extends State<ViewProfile> {
                 isFollwer = true;
               });
             } else {
-              setState(() {
-                isFollwer = false;
-              });
+              if (mounted) {
+                setState(() {
+                  isFollwer = false;
+                });
+              }
               // otherUser?.name과 일치하지 않는 user_name이 있는 경우 처리
               print('일치하는 사용자 이름이 없습니다.');
             }
@@ -66,11 +70,13 @@ class _ViewProfileState extends State<ViewProfile> {
     }
 
     if (data != null) {
-      setState(() {
-        otherUser = OtherUserModel.fromJson(data);
-        imageUrl =
-            'https://ossp.dcs-hyungjoon.com/image?uuid=${otherUser!.imagePath}';
-      });
+      if (mounted) {
+        setState(() {
+          otherUser = OtherUserModel.fromJson(data);
+          imageUrl =
+              'https://ossp.dcs-hyungjoon.com/image?uuid=${otherUser!.imagePath}';
+        });
+      }
     }
   }
 
@@ -88,22 +94,26 @@ class _ViewProfileState extends State<ViewProfile> {
     print("팔로우 신청");
     ApiService apiService = ApiService();
     await apiService.followUser(widget.userId);
-    setState(() {
-      isFollwer = true;
-      // 새로운 데이터를 불러오기 위해 다시 프로필을 가져옵니다.
-      fetchWriterProfile();
-    });
+    if (mounted) {
+      setState(() {
+        isFollwer = true;
+        // 새로운 데이터를 불러오기 위해 다시 프로필을 가져옵니다.
+        fetchWriterProfile();
+      });
+    }
   }
 
   unfollow() async {
     print("팔로우 취소");
     ApiService apiService = ApiService();
     await apiService.unfollowUser(widget.userId);
-    setState(() {
-      isFollwer = false;
-      // 새로운 데이터를 불러오기 위해 다시 프로필을 가져옵니다.
-      fetchWriterProfile();
-    });
+    if (mounted) {
+      setState(() {
+        isFollwer = false;
+        // 새로운 데이터를 불러오기 위해 다시 프로필을 가져옵니다.
+        fetchWriterProfile();
+      });
+    }
   }
 
   @override

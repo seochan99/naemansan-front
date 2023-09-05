@@ -48,9 +48,11 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     } catch (e) {
       // print('Failed to get current location: $e');
       // 위치 가져오기 실패 시 에러 처리 작업 추가
-      setState(() {
-        _currentPosition = null;
-      });
+      if (mounted) {
+        setState(() {
+          _currentPosition = null;
+        });
+      }
     }
   }
 
@@ -82,10 +84,12 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
               ),
               enabled: _isTitleInputEnabled,
               onChanged: (text) {
-                setState(() {
-                  // 입력된 텍스트가 있는지 확인하여 버튼 상태를 업데이트
-                  _isTitleEntered = text.isNotEmpty;
-                });
+                if (mounted) {
+                  setState(() {
+                    // 입력된 텍스트가 있는지 확인하여 버튼 상태를 업데이트
+                    _isTitleEntered = text.isNotEmpty;
+                  });
+                }
               },
             ),
             const SizedBox(height: 16),
@@ -168,26 +172,32 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       position: LatLng(latitude, longitude),
       icon: BitmapDescriptor.defaultMarker,
     );
-    setState(() {
-      _markers.add(marker);
-    });
+    if (mounted) {
+      setState(() {
+        _markers.add(marker);
+      });
+    }
   }
 
   void _startWalk() async {
-    setState(() {
-      _isWalking = true;
-      _isTitleInputEnabled = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isWalking = true;
+        _isTitleInputEnabled = false;
+      });
+    }
 
     final permissionStatus = await Geolocator.checkPermission();
     if (permissionStatus == LocationPermission.denied) {
       final permissionRequested = await Geolocator.requestPermission();
       if (permissionRequested != LocationPermission.whileInUse &&
           permissionRequested != LocationPermission.always) {
-        setState(() {
-          _isWalking = false;
-          _isTitleInputEnabled = true;
-        });
+        if (mounted) {
+          setState(() {
+            _isWalking = false;
+            _isTitleInputEnabled = true;
+          });
+        }
         return;
       }
     }
@@ -195,19 +205,21 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     final positionStream = Geolocator.getPositionStream();
 
     positionStream.listen((Position position) {
-      setState(() {
-        final latitude = position.latitude;
-        final longitude = position.longitude;
-        final location = LatLng(latitude, longitude);
-        _locations.add(location);
-        _addMarker(latitude, longitude); // Add marker for each position
+      if (mounted) {
+        setState(() {
+          final latitude = position.latitude;
+          final longitude = position.longitude;
+          final location = LatLng(latitude, longitude);
+          _locations.add(location);
+          _addMarker(latitude, longitude); // Add marker for each position
 
-        if (_mapController != null) {
-          _mapController!.animateCamera(
-            CameraUpdate.newLatLng(location),
-          );
-        }
-      });
+          if (_mapController != null) {
+            _mapController!.animateCamera(
+              CameraUpdate.newLatLng(location),
+            );
+          }
+        });
+      }
     });
   }
 
@@ -234,9 +246,11 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       },
     );
 
-    setState(() {
-      _isWalking = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isWalking = false;
+      });
+    }
 
     ApiService apiService = ApiService();
 
@@ -253,9 +267,11 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   }
 
   void _completeTitleInput() {
-    setState(() {
-      _isTitleInputEnabled = true;
-      _isTitleEntered = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isTitleInputEnabled = true;
+        _isTitleEntered = true;
+      });
+    }
   }
 }

@@ -96,9 +96,11 @@ class _CommentEditpageState extends State<CommentEditpage> {
           TextFormField(
             initialValue: widget.content,
             onChanged: (value) {
-              setState(() {
-                newComment = value;
-              });
+              if (mounted) {
+                setState(() {
+                  newComment = value;
+                });
+              }
             },
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
