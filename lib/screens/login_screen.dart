@@ -26,18 +26,22 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _asyncMethod() async {
-    setState(() {
-      isLoading = true; // 로딩 상태 갱신
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = true; // 로딩 상태 갱신
+      });
+    }
     //checkStoredTokens();
     userInfo = await storage.read(key: "login");
 
     if (userInfo != null) {
       goIndex();
     } else {}
-    setState(() {
-      isLoading = false; // 로딩 상태 갱신
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false; // 로딩 상태 갱신
+      });
+    }
   }
 
   goIndex() {

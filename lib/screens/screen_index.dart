@@ -22,7 +22,7 @@ class _IndexScreenState extends State<IndexScreen> {
   void initState() {
     super.initState();
     currentIndex = widget.index;
-    // getLoginStatus(); 당분간 사용하지 않습니다
+    getLoginStatus();
   }
 
   Future<void> getLoginStatus() async {
@@ -31,7 +31,9 @@ class _IndexScreenState extends State<IndexScreen> {
     if (userInfo == null) {
       goLogin();
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   goLogin() =>
@@ -55,9 +57,11 @@ class _IndexScreenState extends State<IndexScreen> {
         selectedLabelStyle: const TextStyle(fontSize: 12),
         currentIndex: currentIndex,
         onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
+          if (mounted) {
+            setState(() {
+              currentIndex = index;
+            });
+          }
         },
         items: [
           BottomNavigationBarItem(

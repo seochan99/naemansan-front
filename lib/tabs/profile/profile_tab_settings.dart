@@ -29,16 +29,17 @@ class _SettingsState extends State<Settings> {
 
   Future<void> logout() async {
     ApiService apiService = ApiService();
+
     // 서버 로그아웃 처리
     await apiService.serverLogout();
 
-    // 카카오 로그아웃 처리
+    //카카오 로그아웃 처리
     try {
       await UserApi.instance.logout();
     } catch (error) {}
 
-    await deleteTokens();
     await storage.delete(key: 'login');
+    await deleteTokens();
 
     goLogin();
   }

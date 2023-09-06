@@ -66,8 +66,16 @@ class _AppState extends State<App> {
 
   Future<void> getLoginStatus() async {
     userInfo = await storage.read(key: 'login');
+    print('userInfo : $userInfo');
     userInfo == null ? isLogged = false : isLogged = true;
-    setState(() {});
+
+    setState(
+      () {},
+    );
+  }
+
+  goLogin() {
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
 
   Future<bool> isUserLoggedIn() async {
@@ -80,7 +88,6 @@ class _AppState extends State<App> {
     if (deviceToken != null) {
       await sendDeviceToken(deviceToken, isIos);
     }
-    //return accessToken != null;
     return accessToken != null && refreshToken != null;
   }
 

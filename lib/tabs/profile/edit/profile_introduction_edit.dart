@@ -54,19 +54,23 @@ class _ProfileIntroEditPageState extends State<ProfileIntroEditPage> {
                   hintText: '소개 메시지를 입력하세요',
                 ),
                 onChanged: (value) {
-                  setState(() {
-                    newIntro = value;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      newIntro = value;
+                    });
+                  }
                 },
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  widget.userInfo?['introduction'] = newIntro;
-                });
-                Navigator.of(context).pop(newIntro);
+                if (mounted) {
+                  setState(() {
+                    widget.userInfo?['introduction'] = newIntro;
+                  });
+                  Navigator.of(context).pop(newIntro);
+                }
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.black,

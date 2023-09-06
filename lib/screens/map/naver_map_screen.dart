@@ -45,9 +45,11 @@ class _NaverMapScreenState extends State<NaverMapScreen> {
       );
       _startTimer();
 
-      setState(() {
-        _updateCurrentLocation(position.latitude, position.longitude);
-      });
+      if (mounted) {
+        setState(() {
+          _updateCurrentLocation(position.latitude, position.longitude);
+        });
+      }
     } catch (e) {
       // print('위치 정보를 가져오는 중에 오류가 발생했습니다: $e');
     }
@@ -91,10 +93,12 @@ class _NaverMapScreenState extends State<NaverMapScreen> {
         outlineColor: Colors.transparent,
       );
 
-      setState(() {
-        _pathOverlays.clear(); // Clear the path overlays array
-        _pathOverlays.add(pathOverlay); // Add the new path overlay
-      });
+      if (mounted) {
+        setState(() {
+          _pathOverlays.clear(); // Clear the path overlays array
+          _pathOverlays.add(pathOverlay); // Add the new path overlay
+        });
+      }
     }
   }
 
@@ -165,10 +169,12 @@ class _NaverMapScreenState extends State<NaverMapScreen> {
   }
 
   void startWalking() {
-    setState(() {
-      _isTracking = true;
-      _startTime = DateTime.now();
-    });
+    if (mounted) {
+      setState(() {
+        _isTracking = true;
+        _startTime = DateTime.now();
+      });
+    }
 
     _timer2 = Timer.periodic(const Duration(seconds: 5), (_) {
       _getCurrentLocation();
@@ -176,10 +182,12 @@ class _NaverMapScreenState extends State<NaverMapScreen> {
   }
 
   void stopWalking() async {
-    setState(() {
-      _isTracking = false;
-      _endTime = DateTime.now();
-    });
+    if (mounted) {
+      setState(() {
+        _isTracking = false;
+        _endTime = DateTime.now();
+      });
+    }
     _stopTimer();
 
     final NaverMapController controller = await _controller.future;

@@ -125,20 +125,22 @@ class _CourseEditpageState extends State<CourseEditpage> {
   }
 
   void toggleKeywordStatus(String keyword) {
-    setState(() {
-      for (final item in keywordStatus) {
-        if (item['name'] == keyword) {
-          if (item['status'] == 'DEFAULT') {
-            item['status'] = 'DELETE';
-          } else if (item['status'] == 'DELETE') {
-            item['status'] = 'NEW';
-          } else if (item['status'] == 'NEW') {
-            item['status'] = 'DELETE';
+    if (mounted) {
+      setState(() {
+        for (final item in keywordStatus) {
+          if (item['name'] == keyword) {
+            if (item['status'] == 'DEFAULT') {
+              item['status'] = 'DELETE';
+            } else if (item['status'] == 'DELETE') {
+              item['status'] = 'NEW';
+            } else if (item['status'] == 'NEW') {
+              item['status'] = 'DELETE';
+            }
+            break;
           }
-          break;
         }
-      }
-    });
+      });
+    }
   }
 
   @override
@@ -205,9 +207,11 @@ class _CourseEditpageState extends State<CourseEditpage> {
           TextFormField(
             initialValue: widget.title,
             onChanged: (value) {
-              setState(() {
-                newTitle = value;
-              });
+              if (mounted) {
+                setState(() {
+                  newTitle = value;
+                });
+              }
             },
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -226,9 +230,11 @@ class _CourseEditpageState extends State<CourseEditpage> {
           TextFormField(
             initialValue: widget.introduction,
             onChanged: (value) {
-              setState(() {
-                newIntro = value;
-              });
+              if (mounted) {
+                setState(() {
+                  newIntro = value;
+                });
+              }
             },
             maxLines: 5,
             decoration: const InputDecoration(

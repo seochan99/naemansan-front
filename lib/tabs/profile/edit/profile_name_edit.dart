@@ -54,20 +54,24 @@ class _ProfileNameEditPageState extends State<ProfileNameEditPage> {
                   hintText: '이름을 입력하세요',
                 ),
                 onChanged: (value) {
-                  setState(() {
-                    newName = value;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      newName = value;
+                    });
+                  }
                 },
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  if (widget.userInfo != null) {
-                    widget.userInfo!['name'] = newName;
-                  }
-                });
+                if (mounted) {
+                  setState(() {
+                    if (widget.userInfo != null) {
+                      widget.userInfo!['name'] = newName;
+                    }
+                  });
+                }
                 Navigator.of(context).pop(newName);
               },
               style: ElevatedButton.styleFrom(

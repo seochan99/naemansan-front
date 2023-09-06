@@ -212,9 +212,11 @@ class _MyrailState extends State<Myrail> with SingleTickerProviderStateMixin {
                   children: [
                     TextButton(
                       onPressed: () {
-                        setState(() {
-                          openIndex = 0;
-                        });
+                        if (mounted) {
+                          setState(() {
+                            openIndex = 0;
+                          });
+                        }
                       },
                       style: ButtonStyle(
                         backgroundColor:
@@ -245,9 +247,11 @@ class _MyrailState extends State<Myrail> with SingleTickerProviderStateMixin {
                     const SizedBox(width: 8),
                     TextButton(
                       onPressed: () {
-                        setState(() {
-                          openIndex = 1;
-                        });
+                        if (mounted) {
+                          setState(() {
+                            openIndex = 1;
+                          });
+                        }
                       },
                       style: ButtonStyle(
                         backgroundColor:
@@ -436,9 +440,11 @@ class _MyrailState extends State<Myrail> with SingleTickerProviderStateMixin {
                               padding: const EdgeInsets.only(right: 8.0),
                               child: TextButton(
                                 onPressed: () {
-                                  setState(() {
-                                    selectedIndex = index;
-                                  });
+                                  if (mounted) {
+                                    setState(() {
+                                      selectedIndex = index;
+                                    });
+                                  }
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:

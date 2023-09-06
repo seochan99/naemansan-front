@@ -25,9 +25,11 @@ class _ProfileImageEditPageState extends State<ProfileImageEditPage> {
     final pickedImage =
         await imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      setState(() {
-        _image = File(pickedImage.path);
-      });
+      if (mounted) {
+        setState(() {
+          _image = File(pickedImage.path);
+        });
+      }
     }
   }
 
@@ -36,9 +38,11 @@ class _ProfileImageEditPageState extends State<ProfileImageEditPage> {
       print('이미지를 선택하세요.');
       return;
     }
-    setState(() {
-      // 이미지 선택 후 상태 업데이트 (선택한 이미지를 수정 화면에 표시)
-    });
+    if (mounted) {
+      setState(() {
+        // 이미지 선택 후 상태 업데이트 (선택한 이미지를 수정 화면에 표시)
+      });
+    }
     await ApiService().updateProfilePicture(_image!); //post
   }
 

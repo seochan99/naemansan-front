@@ -46,10 +46,12 @@ class _TrailState extends State<Trail> with SingleTickerProviderStateMixin {
     TrailapiService = TrailApiService();
 
     _getCurrentLocation().then((position) {
-      setState(() {
-        _latitude = position.latitude;
-        _longitude = position.longitude;
-      });
+      if (mounted) {
+        setState(() {
+          _latitude = position.latitude;
+          _longitude = position.longitude;
+        });
+      }
     });
   }
 

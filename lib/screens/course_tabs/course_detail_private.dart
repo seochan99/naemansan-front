@@ -24,9 +24,9 @@ class _IndivCourseDetailState extends State<IndivCourseDetail> {
   String imageUrl = "";
   String userName = "";
 
-  void addComment(String comment) {
-    setState(() {});
-  }
+  //void addComment(String comment) {
+  //  setState(() {});
+  //}
 
   @override
   void initState() {
@@ -56,9 +56,11 @@ class _IndivCourseDetailState extends State<IndivCourseDetail> {
     data = await apiService.getIndividualmentCourseDetailById(widget.id);
 
     if (data != null) {
-      setState(() {
-        trailDetail = IndivTraildetailModel.fromJson(data!);
-      });
+      if (mounted) {
+        setState(() {
+          trailDetail = IndivTraildetailModel.fromJson(data!);
+        });
+      }
     }
   }
 
@@ -67,10 +69,12 @@ class _IndivCourseDetailState extends State<IndivCourseDetail> {
     Map<String, dynamic>? userData = await apiService.getUserInfo();
     if (userData != null) {
       String filename = userData['image_path'];
-      setState(() {
-        imageUrl = 'https://ossp.dcs-hyungjoon.com/image?uuid=$filename';
-        userName = userData['name'];
-      });
+      if (mounted) {
+        setState(() {
+          imageUrl = 'https://ossp.dcs-hyungjoon.com/image?uuid=$filename';
+          userName = userData['name'];
+        });
+      }
     }
   }
 
@@ -148,7 +152,7 @@ class _IndivCourseDetailState extends State<IndivCourseDetail> {
                     ),
                   ),
                   Column(
-                    children: [],
+                    children: const [],
                   ),
                 ],
               ),

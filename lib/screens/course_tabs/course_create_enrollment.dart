@@ -25,9 +25,11 @@ class _CreateErollmentCourseScreenState
     ApiService apiService = ApiService();
     var data = await apiService.getTagList();
 
-    setState(() {
-      allTags = data['data'].cast<String>();
-    });
+    if (mounted) {
+      setState(() {
+        allTags = data['data'].cast<String>();
+      });
+    }
   }
 
   void submitEnrollmentCourse() async {
@@ -106,15 +108,17 @@ class _CreateErollmentCourseScreenState
                     activeColor: Colors.green, // Set the active color to green
 
                     onChanged: (value) {
-                      setState(() {
-                        if (value == true) {
-                          if (selectedTags.length < 8) {
-                            selectedTags.add(tag);
+                      if (mounted) {
+                        setState(() {
+                          if (value == true) {
+                            if (selectedTags.length < 8) {
+                              selectedTags.add(tag);
+                            }
+                          } else {
+                            selectedTags.remove(tag);
                           }
-                        } else {
-                          selectedTags.remove(tag);
-                        }
-                      });
+                        });
+                      }
                     },
                   );
                 },

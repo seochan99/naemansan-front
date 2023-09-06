@@ -69,6 +69,7 @@ class _HomeState extends State<Home> {
     // print(user);
 
     _getCurrentLocation();
+
     setState(() {
       nowLocation = true;
     });
@@ -147,9 +148,11 @@ class _HomeState extends State<Home> {
     if (permission == LocationPermission.deniedForever) {
       return Future.error('위치 권한이 영구적으로 없습니다.');
     }
-    setState(() {
-      nowLocation = false; // Reset the nowLocation flag
-    });
+    if (mounted) {
+      setState(() {
+        nowLocation = false; // Reset the nowLocation flag
+      });
+    }
     try {
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
@@ -157,10 +160,12 @@ class _HomeState extends State<Home> {
       _latitude = position.latitude;
       _longitude = position.longitude;
       await _getAddressFromLatLng(_latitude, _longitude);
-      setState(() {
-        nowLocation =
-            true; // Update the nowLocation flag after successfully retrieving the address
-      });
+      if (mounted) {
+        setState(() {
+          nowLocation =
+              true; // Update the nowLocation flag after successfully retrieving the address
+        });
+      }
     } catch (error) {
       if (mounted) {
         setState(() {
@@ -198,10 +203,12 @@ class _HomeState extends State<Home> {
         }
         // print(results[i]);
       }
-      setState(() {
-        _latitude = latitude;
-        _longitude = longitude;
-      });
+      if (mounted) {
+        setState(() {
+          _latitude = latitude;
+          _longitude = longitude;
+        });
+      }
     }
   }
 
@@ -282,9 +289,11 @@ class _HomeState extends State<Home> {
                       IconButton(
                         onPressed: () {
                           _getCurrentLocation();
-                          setState(() {
-                            nowLocation = true;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              nowLocation = true;
+                            });
+                          }
                         },
                         icon: const Icon(Icons.refresh_rounded),
                       ),
@@ -417,10 +426,12 @@ class _HomeState extends State<Home> {
   }
 
   void _updateSelectedKeyword(String keyword) {
-    setState(() {
-      selectedKeyword = keyword;
-      print("keyword: $selectedKeyword");
-    });
+    if (mounted) {
+      setState(() {
+        selectedKeyword = keyword;
+        print("keyword: $selectedKeyword");
+      });
+    }
   }
 
   Widget _buildKeywordButton(String keyword, {required int index}) {
@@ -430,17 +441,19 @@ class _HomeState extends State<Home> {
         onPressed: () {
           _updateSelectedKeyword(keyword);
 
-          setState(() {
-            // Update the button states based on the index
-            for (int i = 0; i < keywordButtonStates.length; i++) {
-              keywordButtonStates[i] = (i == index);
-            }
-            if (mounted && index == 3) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/tagSelect', (route) => true,
-                  arguments: true);
-            }
-          });
+          if (mounted) {
+            setState(() {
+              // Update the button states based on the index
+              for (int i = 0; i < keywordButtonStates.length; i++) {
+                keywordButtonStates[i] = (i == index);
+              }
+              if (mounted && index == 3) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/tagSelect', (route) => true,
+                    arguments: true);
+              }
+            });
+          }
         },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(

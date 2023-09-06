@@ -65,9 +65,11 @@ class _UsingCourseScreenState extends State<UsingCourseScreen> {
       );
 
       if (startDistance <= distanceThreshold) {
-        setState(() {
-          startLocation = true;
-        });
+        if (mounted) {
+          setState(() {
+            startLocation = true;
+          });
+        }
       }
 
       double endDistance = calculateDistance(
@@ -78,9 +80,11 @@ class _UsingCourseScreenState extends State<UsingCourseScreen> {
       );
 
       if (endDistance <= distanceThreshold) {
-        setState(() {
-          endLocation = true;
-        });
+        if (mounted) {
+          setState(() {
+            endLocation = true;
+          });
+        }
       }
     }
   }
@@ -122,60 +126,68 @@ class _UsingCourseScreenState extends State<UsingCourseScreen> {
       outlineColor: Colors.transparent,
     );
 
-    setState(() {
-      _pathOverlays.add(pathOverlay);
-      startLat = coordinates.first.latitude;
-      startLng = coordinates.first.longitude;
-      lastLat = coordinates.last.latitude;
-      lastLng = coordinates.last.longitude;
-      cameraLat = (startLat + lastLat) / 2;
-      cameraLng = (startLng + lastLng) / 2;
-    });
+    if (mounted) {
+      setState(() {
+        _pathOverlays.add(pathOverlay);
+        startLat = coordinates.first.latitude;
+        startLng = coordinates.first.longitude;
+        lastLat = coordinates.last.latitude;
+        lastLng = coordinates.last.longitude;
+        cameraLat = (startLat + lastLat) / 2;
+        cameraLng = (startLng + lastLng) / 2;
+      });
+    }
   }
 
   void startCourse() {
-    setState(() {
-      isCourseStarted = true;
-      courseStartTime = DateTime.now();
-      _startTimer();
-    });
+    if (mounted) {
+      setState(() {
+        isCourseStarted = true;
+        courseStartTime = DateTime.now();
+        _startTimer();
+      });
+    }
   }
 
   void endCourse() {
-    setState(() {
-      isCourseStarted = false;
-      courseEndTime = DateTime.now();
+    if (mounted) {
+      setState(() {
+        isCourseStarted = false;
+        courseEndTime = DateTime.now();
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('산책 종료'),
-            content: const Text('산책이 종료됐습니다!'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // 다이얼로그 닫기
-                  Navigator.pop(context); // 이전 페이지로 이동
-                },
-                child: const Text('확인'),
-              ),
-            ],
-          );
-        },
-      );
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('산책 종료'),
+              content: const Text('산책이 종료됐습니다!'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // 다이얼로그 닫기
+                    Navigator.pop(context); // 이전 페이지로 이동
+                  },
+                  child: const Text('확인'),
+                ),
+              ],
+            );
+          },
+        );
 
-      _stopTimer();
-    });
+        _stopTimer();
+      });
+    }
   }
 
   void _startTimer() {
     _getCurrentLocation();
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      setState(() {
-        _courseDuration =
-            DateTime.now().difference(courseStartTime ?? DateTime.now());
-      });
+      if (mounted) {
+        setState(() {
+          _courseDuration =
+              DateTime.now().difference(courseStartTime ?? DateTime.now());
+        });
+      }
     });
   }
 
@@ -224,9 +236,11 @@ class _UsingCourseScreenState extends State<UsingCourseScreen> {
       checkLocation();
       // _startTimer();
 
-      setState(() {
-        _updateCurrentLocation(position.latitude, position.longitude);
-      });
+      if (mounted) {
+        setState(() {
+          _updateCurrentLocation(position.latitude, position.longitude);
+        });
+      }
     } catch (e) {
       // print('위치 정보를 가져오는 중에 오류가 발생했습니다: $e');
     }
